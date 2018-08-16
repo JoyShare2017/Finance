@@ -1,0 +1,30 @@
+//
+//  TopicDetailController.h
+//  Finance
+//
+//  Created by 郝旭珊 on 2018/1/29.
+//  Copyright © 2018年 郝旭珊. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface TopicDetailController : UIViewController
+@property (nonatomic, copy) NSString *topicId;
+@end
+
+
+@interface TopicDetailModel: NSObject
+@property (nonatomic , assign) BOOL   follow_ok;
+@property (nonatomic , copy) NSString   * subject_title;
+@property (nonatomic , copy) NSString   * subject_content_shicao;
+@property (nonatomic , copy) NSString   * subject_content_anli;
+@property (nonatomic , copy) NSString   * subject_content_gainian;
+@end
+//@interface TopicDetailAnliModel: NSObject
+//@property (nonatomic , assign) BOOL   follow_ok;
+//@property (nonatomic , copy) NSString   * subject_title;
+//@property (nonatomic , copy) NSString   * subject_content_shicao;
+//@property (nonatomic , copy) NSArray   * subject_content_anli;
+//@property (nonatomic , copy) NSString   * subject_content_gainian;
+//@end
+

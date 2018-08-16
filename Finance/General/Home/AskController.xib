@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AskController">
+            <connections>
+                <outlet property="describeTv" destination="UWy-uT-6E2" id="ZH5-nA-m35"/>
+                <outlet property="questionTf" destination="gV3-zr-58w" id="bYd-n7-bqx"/>
+                <outlet property="tagView" destination="FwL-58-tsj" id="0UU-hT-SkJ"/>
+                <outlet property="view" destination="wOz-dc-uYA" id="v4H-3n-iP6"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="wOz-dc-uYA">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TPW-dl-deg">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
+                    <subviews>
+                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="请写下你的问题并用问号结尾" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gV3-zr-58w">
+                            <rect key="frame" x="10" y="16" width="355" height="18"/>
+                            <nil key="textColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                            <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                        </textField>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="3fh-h1-Rqp"/>
+                        <constraint firstAttribute="trailing" secondItem="gV3-zr-58w" secondAttribute="trailing" constant="10" id="GF1-yn-Hrd"/>
+                        <constraint firstItem="gV3-zr-58w" firstAttribute="leading" secondItem="TPW-dl-deg" secondAttribute="leading" constant="10" id="VfF-nz-lQb"/>
+                        <constraint firstItem="gV3-zr-58w" firstAttribute="centerY" secondItem="TPW-dl-deg" secondAttribute="centerY" id="tQe-wT-1We"/>
+                    </constraints>
+                </view>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UWy-uT-6E2">
+                    <rect key="frame" x="0.0" y="62" width="375" height="130"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="130" id="3KI-SO-ths"/>
+                    </constraints>
+                    <color key="textColor" red="0.78039215689999997" green="0.78039215689999997" blue="0.78039215689999997" alpha="1" colorSpace="calibratedRGB"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGL-BI-DVY">
+                    <rect key="frame" x="10" y="192" width="365" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="hzs-Z1-aqu"/>
+                    </constraints>
+                    <attributedString key="attributedText">
+                        <fragment content="添加问题标签 ">
+                            <attributes>
+                                <color key="NSColor" red="0.9137254901960784" green="0.53725490196078429" blue="0.054901960784313725" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="13" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                        <fragment content=" (最多添加3个标签, 标签最多为4字）">
+                            <attributes>
+                                <color key="NSColor" red="0.77254901960784317" green="0.77254901960784317" blue="0.77254901960784317" alpha="1" colorSpace="calibratedRGB"/>
+                                <font key="NSFont" size="12" name=".PingFangSC-Regular"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FwL-58-tsj">
+                    <rect key="frame" x="0.0" y="232" width="375" height="60"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="ona-pa-HOa"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cyh-oP-M0I">
+                    <rect key="frame" x="0.0" y="312" width="375" height="200"/>
+                    <color key="backgroundColor" red="0.96470588239999999" green="0.96470588239999999" blue="0.96470588239999999" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="200" id="1SV-1f-of5"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="UWy-uT-6E2" firstAttribute="top" secondItem="TPW-dl-deg" secondAttribute="bottom" constant="12" id="7Oz-4g-nsB"/>
+                <constraint firstAttribute="trailing" secondItem="FwL-58-tsj" secondAttribute="trailing" id="88B-3S-yvD"/>
+                <constraint firstItem="Cyh-oP-M0I" firstAttribute="leading" secondItem="wOz-dc-uYA" secondAttribute="leading" id="AGf-Lb-nLY"/>
+                <constraint firstItem="FwL-58-tsj" firstAttribute="leading" secondItem="wOz-dc-uYA" secondAttribute="leading" id="BHu-CG-vbw"/>
+                <constraint firstAttribute="trailing" secondItem="TPW-dl-deg" secondAttribute="trailing" id="KTX-1C-orL"/>
+                <constraint firstAttribute="trailing" secondItem="UWy-uT-6E2" secondAttribute="trailing" id="L9G-zb-Vxb"/>
+                <constraint firstItem="UWy-uT-6E2" firstAttribute="leading" secondItem="wOz-dc-uYA" secondAttribute="leading" id="YsJ-GS-jiU"/>
+                <constraint firstItem="rGL-BI-DVY" firstAttribute="top" secondItem="UWy-uT-6E2" secondAttribute="bottom" id="csN-BU-Xpz"/>
+                <constraint firstItem="TPW-dl-deg" firstAttribute="top" secondItem="wOz-dc-uYA" secondAttribute="top" id="fxZ-dh-B2k"/>
+                <constraint firstItem="Cyh-oP-M0I" firstAttribute="top" secondItem="FwL-58-tsj" secondAttribute="bottom" constant="20" id="gZs-EF-HdP"/>
+                <constraint firstAttribute="trailing" secondItem="Cyh-oP-M0I" secondAttribute="trailing" id="ldh-Wk-iyM"/>
+                <constraint firstItem="TPW-dl-deg" firstAttribute="leading" secondItem="wOz-dc-uYA" secondAttribute="leading" id="oxE-oZ-ppm"/>
+                <constraint firstItem="rGL-BI-DVY" firstAttribute="leading" secondItem="wOz-dc-uYA" secondAttribute="leading" constant="10" id="wWa-dP-7l4"/>
+                <constraint firstItem="FwL-58-tsj" firstAttribute="top" secondItem="rGL-BI-DVY" secondAttribute="bottom" id="ww3-wk-9wb"/>
+                <constraint firstAttribute="trailing" secondItem="rGL-BI-DVY" secondAttribute="trailing" id="xkc-cm-6F6"/>
+            </constraints>
+            <point key="canvasLocation" x="5.5" y="-25.5"/>
+        </view>
+    </objects>
+</document>

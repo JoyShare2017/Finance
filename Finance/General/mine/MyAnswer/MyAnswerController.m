@@ -1,0 +1,407 @@
+//
+//  MyAnswerController.m
+//  Finance
+//
+//  Created by 郝旭珊 on 2018/1/31.
+//  Copyright © 2018年 郝旭珊. All rights reserved.
+//
+
+#import "MyAnswerController.h"
+#import "MyAskCell.h"
+#import "MyConsultCell.h"
+#import "AnswerModel.h"
+#import "MyConsultModel.h"
+#import "SwitchButtonView.h"
+#import "QuestionDetailController.h"
+#import "ExpertConsultListController.h"
+#import "BecomeExpertController.h"
+#import "QuestionModel.h"
+@interface MyAnswerController ()<DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
+@property (nonatomic, strong) NSMutableArray *answers;
+@property (nonatomic, strong) NSMutableArray *consults;
+@property (nonatomic, assign) NSInteger selectedIndex;
+@property (nonatomic, strong) UIView *footerView;
+@end
+
+@implementation MyAnswerController
+
+- (NSMutableArray *)answers{
+    if (_answers == nil){
+        _answers = [NSMutableArray array];
+    }
+    return _answers;
+}
+- (NSMutableArray *)consults{
+    if (_consults == nil){
+        _consults = [NSMutableArray array];
+    }
+    return _consults;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.title = @"我的回答";
+
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    self.tableView.allowsMultipleSelection = YES;
+//    [self.tableView registerClass:[MyAskCell class] forCellReuseIdentifier:@"MyAskCell"];
+    [self.tableView registerClass:[MyConsultCell class] forCellReuseIdentifier:@"MyConsultCell"];
+    self.tableView.tableFooterView = [UIView new];
+    [self.view addSubview:self.tableView];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(edit:)];
+
+    SwitchButtonView *switchButtonView = [[SwitchButtonView alloc] initWithTitles:@[@"问题回答",@"咨询回答"]];
+    switchButtonView.buttonSwitch = ^(UIButton *sender) {
+        self.selectedIndex = sender.tag;
+        if (sender.tag == 1 && self.consults.count <= 0){
+            [self loadMyConsultDataList];
+        }
+        [self.tableView reloadData];
+    };
+    [self.view addSubview:switchButtonView];
+    self.tableView.frame=CGRectMake(0, CGRectGetMaxY(switchButtonView.frame), SCREEN_WIDTH, SCREEN_HEIGHT-NAVGATION_MAXY-switchButtonView.frame.size.height-HOME_HEIGHT);
+
+    [self setupDeleteView];
+    [self loadMyAnswerDataList];
+//    self.tableView.emptyDataSetSource=self;
+//    self.tableView.emptyDataSetDelegate=self;
+}
+
+
+- (void)setupDeleteView{
+    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT-BUTTON_HEIGHT-NAVGATION_MAXY-HOME_HEIGHT, SCREEN_WIDTH, BUTTON_HEIGHT)];
+    footerView.backgroundColor = WHITECOLOR;
+    footerView.hidden = YES;
+    self.footerView = footerView;
+
+    UIButton *selectAllButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 100, footerView.height)];
+    selectAllButton.titleLabel.font = FONT_NORMAL;
+    [selectAllButton setTitle:@"全选" forState:UIControlStateNormal];
+    [selectAllButton setTitleColor:BLACKCOLOR forState:UIControlStateNormal];
+    [selectAllButton setImage:[UIImage imageNamed:@"circle_empty"] forState:UIControlStateNormal];
+    [selectAllButton setImage:[UIImage imageNamed:@"circle_tick_orange"] forState:UIControlStateSelected];
+    selectAllButton.imageEdgeInsets = UIEdgeInsetsMake(0, -10, 0, 0);
+    [selectAllButton addTarget:self action:@selector(selectAll:) forControlEvents:UIControlEventTouchUpInside];
+
+    UIButton *deleteButton = [[UIButton alloc]initWithFrame:CGRectMake(SCREEN_WIDTH-90, 0, 90, footerView.height)];
+    [deleteButton setTitle:@"删除" forState:UIControlStateNormal];
+    deleteButton.titleLabel.font = FONT_NORMAL;
+    deleteButton.backgroundColor = MAJORCOLOR;
+    [deleteButton addTarget:self action:@selector(deleteAction) forControlEvents:UIControlEventTouchUpInside];
+
+    [footerView addSubview:selectAllButton];
+    [footerView addSubview:deleteButton];
+    [self.view addSubview:footerView];
+}
+
+
+- (void)deleteAction{
+    if (self.selectedIndex == 0){
+        [self commitDeleteMyAnswers];
+    }else{
+        [self commitDeleteMyConsults];
+    }
+}
+
+
+- (void)selectAll:(UIButton *)sender{
+    sender.selected = !sender.selected;
+    if (sender.selected){
+        [self.tableView.visibleCells enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }];
+        [sender setTitle:@"全不选" forState:UIControlStateNormal];
+    }else{
+        [self.tableView reloadData];
+        [sender setTitle:@"全选" forState:UIControlStateNormal];
+    }
+}
+
+
+
+- (void)edit:(UIBarButtonItem *)item{
+    if ([item.title isEqualToString:@"编辑"]) {
+        item.title = @"完成";
+        [self.tableView setEditing:YES animated:YES];
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, BUTTON_HEIGHT, 0);
+        self.tableView.allowsMultipleSelectionDuringEditing = YES;
+        self.footerView.hidden = NO;
+    }else{
+        item.title = @"编辑";
+        [self.tableView setEditing:NO animated:YES];
+        self.tableView.contentInset = UIEdgeInsetsZero;
+        self.footerView.hidden = YES;
+    }
+}
+
+
+- (NSAttributedString *)buttonTitleForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state{
+    NSAttributedString *attr = [[NSAttributedString alloc]initWithString:@"成为专家" attributes:@{NSFontAttributeName:FONT_BIG,NSForegroundColorAttributeName:MAJORCOLOR}];
+    return attr;
+}
+
+
+- (UIImage *)buttonBackgroundImageForEmptyDataSet:(UIScrollView *)scrollView forState:(UIControlState)state{
+    return [UIImage imageNamed:@"button_border"];
+}
+
+- (void)emptyDataSet:(UIScrollView *)scrollView didTapButton:(UIButton *)button{
+    BecomeExpertController *vc = [[UIStoryboard storyboardWithName:@"BecomeExpertController" bundle:nil] instantiateViewControllerWithIdentifier:@"BecomeExpert"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (CGFloat)verticalOffsetForEmptyDataSet:(UIScrollView *)scrollView{
+    return -100;
+}
+
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    if (self.selectedIndex == 0){
+        return self.answers.count;
+    }else{
+        return self.consults.count;
+    }
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.selectedIndex == 0){
+        MyAskCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyAskCell"];
+        if (!cell) {
+            cell=[[MyAskCell alloc]initWithStyle:(UITableViewCellStyleSubtitle) reuseIdentifier:@"MyAskCell"];
+        }
+
+        cell.textLabel.textColor = BLACKCOLOR;
+        cell.textLabel.font = FONT_NORMAL;
+        cell.detailTextLabel.font = FONT_SMALL;
+        cell.detailTextLabel.textColor = GRAYCOLOR_TEXT;
+        cell.imageView.image=[UIImage imageNamed:@"answer"];
+        AnswerModel *model = self.answers[indexPath.row];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@?",model.question_title];
+        cell.detailTextLabel.text = model.answer_content;
+        cell.separatorInset = UIEdgeInsetsMake(0, MARGIN, 0, MARGIN);
+        cell.tintColor=MAJORCOLOR;
+
+        return cell;
+    }else{
+        MyConsultCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MyConsultCell"];
+        cell.myConsultModel = self.consults[indexPath.row];
+        cell.tintColor=MAJORCOLOR;
+        return cell;
+    }
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.selectedIndex == 0){
+        return 60;
+    }else{
+        return 60;
+    }
+}
+
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+
+    if (tableView.isEditing){
+        return;
+    }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.selectedIndex == 0){
+        QuestionDetailController *vc = [QuestionDetailController new];
+        AnswerModel *model = self.answers[indexPath.row];
+        vc.questionId = model.answer_question_id;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        ExpertConsultListController *vc = [ExpertConsultListController new];
+        MyConsultModel *model = self.consults[indexPath.row];
+        vc.zixunId=model.mco_id;
+//        vc.expertUserId = model.mco_beizixun_user;
+//        vc.severName = model.mco_server_name;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+
+}
+
+
+#pragma mark - 多选删除
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return UITableViewCellEditingStyleDelete | UITableViewCellEditingStyleInsert;
+}
+
+
+- (void)deleteMessage{
+    NSArray *selectedIndexPaths = self.tableView.indexPathsForSelectedRows;
+    NSMutableArray *tempArray = [NSMutableArray array];
+    NSArray *targetArray = self.selectedIndex == 0 ? self.answers :self.consults;
+
+    [targetArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        BOOL isSame = NO;
+        for (NSIndexPath *indexPath in selectedIndexPaths){
+            if (indexPath.row == idx){
+                isSame = YES;
+                break; //退出内层的for循环
+            }
+        }
+        if (isSame == NO){
+            [tempArray addObject:self.answers[idx]];
+        }
+    }];
+
+
+    if (self.selectedIndex == 0){
+        self.answers = tempArray;
+    }else{
+        self.consults = tempArray;
+    }
+    [self.tableView reloadData];
+
+}
+
+
+
+#pragma mark - Network
+- (void)commitDeleteMyAnswers{
+    NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
+    NSMutableArray *idArray = [NSMutableArray array];
+    for (NSIndexPath *indexPath in indexPaths){
+        AnswerModel *model = self.answers[indexPath.row];
+        [idArray addObject:model.answer_id];
+    }
+    NSString *idsStr = [idArray componentsJoinedByString:@","];
+    [self showHudInView:self.view hint:@"删除中...."];
+    /*
+     接口：member/index/member_answer_del
+     参数：
+     @param  int        user_id            * 用户的id
+     @param  string    user_name        * 用户名
+     @param  string    answer_id         * 回答的主键（多个，逗号隔开）
+     */
+    NSString *urlStr = [OPENAPIHOST stringByAppendingString:@"member/index/member_answer_del"];
+    UserAccount *user = [UserAccountManager sharedManager].userAccount;
+    NSDictionary *parameter = @{@"user_id":@([user.user_id integerValue]),
+                                @"user_name":user.user_name,
+                                @"answer_id":idsStr
+                                };
+
+    [[NetworkManager sharedManager]request:POST URLString:urlStr parameters:parameter callback:^(NetworkResult resultCode, id responseObject) {
+        [self hideHud];
+        if (resultCode != NetworkResultSuceess){
+            [self showHint:(NSString *)responseObject];
+            return;
+        }
+        [self deleteMessage];
+    }];
+}
+
+
+- (void)commitDeleteMyConsults{
+    NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
+    NSMutableArray *idArray = [NSMutableArray array];
+    for (NSIndexPath *indexPath in indexPaths){
+        MyConsultModel *model = self.consults[indexPath.row];
+        [idArray addObject:model.mco_id];
+    }
+    NSString *idsStr = [idArray componentsJoinedByString:@","];
+    [self showHudInView:self.view hint:@"删除中...."];
+    /*
+     接口：member/index/member_consult_del
+     参数：
+     @param  int        user_id            * 用户的id
+     @param  string    user_name        * 用户名
+     @param  string    consult_id         * 咨询的id（多个逗号隔开）
+     */
+    NSString *urlStr = [OPENAPIHOST stringByAppendingString:@"member/index/member_consult_del"];
+    UserAccount *user = [UserAccountManager sharedManager].userAccount;
+    NSDictionary *parameter = @{@"user_id":@([user.user_id integerValue]),
+                                @"user_name":user.user_name,
+                                @"consult_id":idsStr
+                                };
+
+    [[NetworkManager sharedManager]request:POST URLString:urlStr parameters:parameter callback:^(NetworkResult resultCode, id responseObject) {
+        [self hideHud];
+        if (resultCode != NetworkResultSuceess){
+            [self showHint:(NSString *)responseObject];
+            return;
+        }
+        [self deleteMessage];
+    }];
+}
+
+
+
+
+- (void)loadMyAnswerDataList{
+    /*
+     接口：member/index/member_question_list
+     参数：
+     @param  int        user_id            * 用户的id
+     @param  string    user_name        * 用户名
+     @param  int  page         第几页(默认第1页)
+     @param  int  page_size     每页几条数据(默认6条)
+     */
+    [self showHudInView:self.view];
+    NSString *urlStr = [OPENAPIHOST stringByAppendingString:@"member/index/member_answer_list"];
+    UserAccount *user = [UserAccountManager sharedManager].userAccount;
+    NSDictionary *parameter = @{@"user_id":@([user.user_id integerValue]),
+                                @"user_name":user.user_name,
+                                @"page":@(1),
+                                @"page_size":@(100)
+                                };
+
+    [[NetworkManager sharedManager]request:POST URLString:urlStr parameters:parameter callback:^(NetworkResult resultCode, id responseObject) {
+        [self hideHud];
+        if (resultCode != NetworkResultSuceess){
+            [self showHint:(NSString *)responseObject];
+            [self.tableView reloadData];
+            return;
+        }
+
+        for (NSDictionary *dict in responseObject){
+            AnswerModel *model = [AnswerModel mj_objectWithKeyValues:dict];
+            [self.answers addObject:model];
+        }
+        self.tableView.emptyDataSetSource = self;
+        self.tableView.emptyDataSetDelegate = self;
+        [self.tableView reloadData];
+    }];
+}
+
+
+- (void)loadMyConsultDataList{
+    /*
+     接口：member/index/member_consult_list
+     参数：
+     @param  int        user_id            * 用户的id
+     @param  string    user_name        * 用户名
+     @param  int  page         第几页(默认第1页)
+     @param  int  page_size     每页几条数据(默认6条)
+     */
+    [self showHudInView:self.view];
+    NSString *urlStr = [OPENAPIHOST stringByAppendingString:@"member/index/member_consult_passive_list"];
+    UserAccount *user = [UserAccountManager sharedManager].userAccount;
+    NSDictionary *parameter = @{@"user_id":@([user.user_id integerValue]),
+                                @"user_name":user.user_name,
+                                @"page":@(1),
+                                @"page_size":@(100)
+                                };
+
+    [[NetworkManager sharedManager]request:POST URLString:urlStr parameters:parameter callback:^(NetworkResult resultCode, id responseObject) {
+        [self hideHud];
+        if (resultCode != NetworkResultSuceess){
+            [self showHint:(NSString *)responseObject];
+            [self.tableView reloadData];
+            return;
+        }
+
+        for (NSDictionary *dict in responseObject){
+            MyConsultModel *model = [MyConsultModel mj_objectWithKeyValues:dict];
+            [self.consults addObject:model];
+            [self.tableView reloadData];
+        }
+    }];
+}
+
+
+
+@end

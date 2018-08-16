@@ -1,0 +1,186 @@
+//
+//  AllAnswerController.m
+//  Finance
+//
+//  Created by 郝旭珊 on 2018/1/13.
+//  Copyright © 2018年 郝旭珊. All rights reserved.
+//
+
+#import "AllAnswerController.h"
+#import "AllAnswerModel.h"
+#import "AnswerModel.h"
+#import "ExpertCell.h"
+#import "ExpertAnswerCell.h"
+#import "AnswerController.h"
+
+#define expertAnswerCell @"expertAnswerCellReuseIdentifier"
+
+@interface AllAnswerController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *answers;
+@property (nonatomic, strong) AnswerModel *answerTop;
+
+@end
+
+@implementation AllAnswerController
+
+- (UITableView *)tableView{
+    if (_tableView == nil){
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-NAVGATION_MAXY-BUTTON_HEIGHT-HOME_HEIGHT) style:UITableViewStyleGrouped];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        
+        [_tableView registerClass:[ExpertAnswerCell class] forCellReuseIdentifier:expertAnswerCell];
+        _tableView.tableFooterView = [[UIView alloc]initWithFrame:CGRectZero];
+        
+    }
+    return _tableView;
+}
+
+
+- (NSMutableArray *)answers{
+    if (_answers == nil){
+        _answers = [NSMutableArray array];
+    }
+    return _answers;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.title = @"更多回答";
+    [self loadAllAnswerList];
+    
+    self.tableView.rowHeight = 170;
+    [self.view addSubview:self.tableView];
+    
+    UIBarButtonItem *collectItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"star"] style:UIBarButtonItemStylePlain target:self action:@selector(collect)];
+    UIBarButtonItem *forwardItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"forward"] style:UIBarButtonItemStylePlain target:self action:@selector(forward)];
+    self.navigationItem.rightBarButtonItems = @[forwardItem,collectItem];
+
+    UIButton *answerButton = [UIButton buttonWithFrame:CGRectMake(MARGIN, self.tableView.maxY, SCREEN_WIDTH-MARGIN*2, BUTTON_HEIGHT) title:@"我来解答" font:FONT_NORMAL titleColor:WHITECOLOR backgroundColor:MAJORCOLOR target:self actionName:@"answer"];
+    [self.view addSubview:answerButton];
+}
+
+
+- (void)answer{
+    AnswerController *vc = [AnswerController new];
+    vc.questionId = self.questionId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc{
+    
+}
+
+- (void)setupHeaderView{
+    ExpertAnswerCell *cell = [[ExpertAnswerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:expertAnswerCell];
+    cell.frame = CGRectMake(0, 0, SCREEN_WIDTH, 170);
+    cell.answerModel = self.answerTop;
+
+    if ([[self.answerTop.answer_user_data allKeys] containsObject:@"expert_id"]){
+        ExpertModel *expertModel = [ExpertModel mj_objectWithKeyValues:self.answerTop.answer_user_data];
+        cell.expertModel = expertModel;
+    }
+    
+    UIImage *image = [UIImage imageNamed:@"expert_answer"];
+    UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+    imageView.frame = CGRectMake(cell.width-image.size.width, 0, image.size.width, image.size.height);
+    [cell addSubview:imageView];
+    
+    self.tableView.tableHeaderView = cell;
+}
+
+- (void)collect{
+    
+}
+
+- (void)forward{
+    
+}
+
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    return self.answers.count;
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    ExpertAnswerCell *cell = [tableView dequeueReusableCellWithIdentifier:expertAnswerCell];
+    AnswerModel *model = self.answers[indexPath.row];
+    cell.answerModel = model;
+    
+    if ([[model.answer_user_data allKeys] containsObject:@"expert_id"]){
+        ExpertModel *expertModel = [ExpertModel mj_objectWithKeyValues:model.answer_user_data];
+        cell.expertModel = expertModel;
+    }else{
+        UserAccount *userModel = [UserAccount mj_objectWithKeyValues:model.answer_user_data];
+        cell.userModel = userModel;
+    }
+    
+    return cell;
+}
+
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    ExpertAnswerCell *cell = [[ExpertAnswerCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:expertAnswerCell];
+    AnswerModel *model = self.answers[indexPath.row];
+    CGFloat height = 0;
+    if (model.isExpertAnswer){
+        ExpertModel *expertModel = [ExpertModel mj_objectWithKeyValues:model.answer_user_data];
+        height = [cell cellHeightWithAnswerModel:model expertModel:expertModel userModel:nil];
+    }else{
+        UserAccount *userModel = [UserAccount mj_objectWithKeyValues:model.answer_user_data];
+        height = [cell cellHeightWithAnswerModel:model expertModel:nil   userModel:userModel];
+    }
+    
+    DebugLog(@"Controller---%f-",height);
+    return height;
+    
+}
+
+- (void)loadAllAnswerList{
+    /*接口：index/answer_list
+     参数：
+     @param  int     question_id     * 问题的主键
+     @param  int  page          第几页(默认第1页)
+     @param  int     page_size    每页几条数据(默认6条)
+*/
+    [self showHudInView:self.view];
+   
+    NSString *urlStr = [OPENAPIHOST stringByAppendingString:@"index/answer_list"];
+    NSDictionary *parameter = @{@"question_id":@(3),
+                                @"page":@(1),
+                                @"page_size":@(6)
+                                };
+    [[NetworkManager sharedManager]request:POST URLString:urlStr parameters:parameter callback:^(NetworkResult resultCode, id responseObject) {
+        [self hideHud];
+        
+        if (resultCode != NetworkResultSuceess){
+            [self showHint:(NSString *)responseObject];
+        }
+        
+        AllAnswerModel *allAnswer = [AllAnswerModel mj_objectWithKeyValues:responseObject];
+        if (allAnswer.answer_top){
+            self.answerTop = allAnswer.answer_top;
+            [self setupHeaderView];
+        }
+        
+        for (NSDictionary *dict in allAnswer.answer_list){
+            AnswerModel *model = [AnswerModel mj_objectWithKeyValues:dict];
+            [self.answers addObject:model];
+        }
+        
+        [self.tableView reloadData];
+    }];
+}
+
+@end

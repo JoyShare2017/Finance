@@ -1,0 +1,255 @@
+//
+//  TopicDetailController.m
+//  Finance
+//
+//  Created by 郝旭珊 on 2018/1/29.
+//  Copyright © 2018年 郝旭珊. All rights reserved.
+//
+
+#import "TopicDetailController.h"
+#import "TopicCell.h"
+#import "TopicAnliCell.h"
+#define HeaderView_Height 80
+#define FooterView_Height 50
+
+@interface TopicDetailController ()<UICollectionViewDelegate,UICollectionViewDataSource,UIWebViewDelegate>
+
+@property (nonatomic, copy) NSArray *footerButtons;
+@property (nonatomic, strong) UIButton *selectedButton;
+@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, copy) NSArray *titles;
+@property (nonatomic, strong) TopicDetailModel *topicDetailModel;
+@property (nonatomic, strong) UIButton *collectBtn;
+@property (nonatomic, strong) NSArray *anliarr;
+
+@end
+
+@implementation TopicDetailController
+
+static NSString * const reuseIdentifier = @"Cell";
+static NSString * const reuseIdentifierAnli = @"CellAnli";
+- (NSArray *)titles{
+    if (_titles == nil){
+       _titles = @[@"概念",@"实操",@"案例"];
+    }
+    return _titles;
+}
+
+- (UICollectionView *)collectionView{
+    if (_collectionView == nil){
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+//        layout.itemSize = CGSizeMake(SCREEN_WIDTH, USEABLE_VIEW_HEIGHT);
+        layout.estimatedItemSize = CGSizeMake(SCREEN_WIDTH, 150);
+        layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        layout.headerReferenceSize = CGSizeMake(SCREEN_WIDTH, HeaderView_Height);
+
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, USEABLE_VIEW_HEIGHT-FooterView_Height) collectionViewLayout:layout];
+        _collectionView.backgroundColor = GRAYCOLOR_BACKGROUND;
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        [_collectionView registerClass:[TopicCell class] forCellWithReuseIdentifier:reuseIdentifier];
+        [_collectionView registerClass:[TopicAnliCell class] forCellWithReuseIdentifier:reuseIdentifierAnli];
+        [_collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView"];
+    }
+    return _collectionView;
+}
+
+
+- (void)viewDidLoad{
+    self.title = @"知识解读";
+    self.view.backgroundColor=WHITECOLOR;
+    [self loadTopicDetail];
+    [self addNavgationItem];
+    [self setupFooterView];
+
+}
+
+- (void)addNavgationItem{
+    _collectBtn=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    [_collectBtn setImage:[UIImage imageNamed:@"star_white"] forState:(UIControlStateNormal)];
+    [_collectBtn setImage:[UIImage imageNamed:@"star_red"] forState:(UIControlStateSelected)];
+    [_collectBtn addTarget:self action:@selector(collect) forControlEvents:(UIControlEventTouchUpInside)];
+
+    UIBarButtonItem *collectItem = [[UIBarButtonItem alloc]initWithCustomView:_collectBtn];
+    UIBarButtonItem *forwardItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"forward"] style:UIBarButtonItemStylePlain target:self action:@selector(forward)];
+    self.navigationItem.rightBarButtonItems = @[forwardItem,collectItem];
+}
+
+- (void)collect{
+    [self showHudInView:self.view];
+    [KCommonNetRequest followOrDeleteSubjectFollowWithSubject_id:self.topicId andISFollow:!_collectBtn.selected andComplete:^(BOOL success, id obj) {
+        [self hideHud];
+        if (success) {
+            [self showHint:_collectBtn.selected?@"取消收藏成功":@"收藏成功" ];
+            self.collectBtn.selected=!self.collectBtn.selected;
+        }else{
+            [self showHint:(NSString *)obj];
+        }
+
+    }];
+}
+
+- (void)forward{
+
+}
+
+- (void)setupFooterView{
+    UIView *footerView = [[UIView alloc]initWithFrame:CGRectMake(0, USEABLE_VIEW_HEIGHT-FooterView_Height, SCREEN_WIDTH, FooterView_Height)];
+    footerView.layer.borderWidth = 1;
+    footerView.layer.borderColor = GRAYCOLOR_BORDER.CGColor;
+    [self.view addSubview:footerView];
+
+    NSMutableArray *mArray = [NSMutableArray array];
+    CGFloat btnW = SCREEN_WIDTH / 3;
+    for (int i=0;i<3;i++){
+        NSArray *titles = @[@"概念",@"实操",@"案例"];
+        UIButton *btn = [UIButton buttonWithFrame:CGRectMake(btnW*i, 0, btnW, 50) title:titles[i] font:FONT_NORMAL titleColor:GRAYCOLOR_TEXT backgroundColor:WHITECOLOR target:self actionName:@"switchPageAction:"];
+        [btn setTitleColor:WHITECOLOR forState:UIControlStateSelected];
+        btn.tag = i;
+        if (btn.tag == 0){
+            btn.backgroundColor = MAJORCOLOR;
+            btn.selected = YES;
+            self.selectedButton = btn;
+        }
+        [footerView addSubview:btn];
+        [mArray addObject:btn];
+    }
+    self.footerButtons = mArray;
+}
+
+
+- (void)switchPageAction:(UIButton *)sender{
+    self.selectedButton.selected = NO;
+    self.selectedButton.backgroundColor = WHITECOLOR;
+    self.selectedButton = sender;
+    self.selectedButton.selected = YES;
+    self.selectedButton.backgroundColor = MAJORCOLOR;
+
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sender.tag inSection:0];
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
+}
+
+
+#pragma mark <UICollectionViewDataSource>
+
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return 3;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    if (indexPath.row==2) {
+       TopicAnliCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifierAnli forIndexPath:indexPath];
+        cell.anliArr=self.anliarr;
+        return cell;
+    }else{
+
+        TopicCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+        cell.contentView.backgroundColor = WHITECOLOR;
+        cell.lableText = self.titles[indexPath.row];
+
+        NSString *htmlStr;
+        if (indexPath.row == 0){
+            htmlStr = self.topicDetailModel.subject_content_gainian;
+        }else if (indexPath.row == 1){
+            htmlStr = self.topicDetailModel.subject_content_shicao;
+        }else{
+            htmlStr = self.topicDetailModel.subject_content_anli;
+        }
+        [cell.webView loadHTMLString:htmlStr baseURL:nil];
+
+        return cell;
+    }
+}
+
+
+
+- (UICollectionReusableView *) collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
+
+    UICollectionReusableView *reusableview = nil;
+    if (kind == UICollectionElementKindSectionHeader){
+        reusableview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"HeaderView" forIndexPath:indexPath];
+        UILabel *headerLabel = [UILabel labelWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, HeaderView_Height) text:self.topicDetailModel.subject_title textFont:FONT_MAX textColor:BLACKCOLOR];
+        headerLabel.textAlignment = NSTextAlignmentCenter;
+        [reusableview addSubview:headerLabel];
+    }
+    return reusableview;
+
+}
+
+////每个单元格的大小size
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+//    TopicCell *cell = [[TopicCell alloc]init];
+//    NSString *htmlStr;
+//    if (indexPath.row == 0){
+//        htmlStr = self.topicDetailModel.subject_content_gainian;
+//    }else if (indexPath.row == 1){
+//        htmlStr = self.topicDetailModel.subject_content_shicao;
+//    }else{
+//        htmlStr = self.topicDetailModel.subject_content_anli;
+//    }
+//    [cell.webView loadHTMLString:htmlStr baseURL:nil];
+//    DebugLog(@"cell.cellHeight------%f",cell.cellHeight);
+//    return CGSizeMake(SCREEN_WIDTH, cell.cellHeight);
+//}
+
+
+#pragma mark <UICollectionViewDelegate>
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+
+    self.selectedButton.selected = NO;
+    self.selectedButton.backgroundColor = WHITECOLOR;
+    self.selectedButton = self.footerButtons[indexPath.row];
+    self.selectedButton.selected = YES;
+    self.selectedButton.backgroundColor = MAJORCOLOR;
+
+}
+
+
+- (void)loadTopicDetail{
+    [self showHudInView:self.view];
+    /*
+     接口：index/subject_show
+     参数：
+     @param  string      subject_id        * 专题的id
+     @param  int       user_id         用户的id
+     @param  string      user_name       用户名
+     */
+    NSString *urlStr = [OPENAPIHOST stringByAppendingString:@"index/subject_show"];
+    UserAccount *user = [UserAccountManager sharedManager].userAccount;
+    NSDictionary *parameter = @{@"subject_id":self.topicId,
+                                @"user_id":@([user.user_id integerValue]),
+                                    @"user_name" : user.user_name
+                                };
+
+    [[NetworkManager sharedManager] request:POST URLString:urlStr parameters:parameter callback:^(NetworkResult resultCode, id responseObject) {
+        NSLog(@"*****responseObject*****%@",responseObject);
+        [self hideHud];
+        if (resultCode != NetworkResultSuceess){
+            [self showHint:(NSString *)responseObject];
+            return;
+        }
+        self.anliarr=responseObject[@"subject_content_anli"];
+        
+
+        self.topicDetailModel = [TopicDetailModel mj_objectWithKeyValues:responseObject];
+        self.collectBtn.selected=self.topicDetailModel.follow_ok;
+
+        [self.view addSubview:self.collectionView];
+        [self.collectionView reloadData];
+    }];
+
+}
+
+
+@end
+
+
+
+@implementation TopicDetailModel
+
+@end
+
+

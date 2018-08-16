@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="SearchCell" selectionStyle="default" indentationWidth="10" rowHeight="42" id="Cvq-Fr-Q4W" customClass="SearchCell">
+            <rect key="frame" x="0.0" y="0.0" width="354" height="42"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Cvq-Fr-Q4W" id="I1e-oa-WC8">
+                <rect key="frame" x="0.0" y="0.0" width="354" height="41.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_search_clock" translatesAutoresizingMaskIntoConstraints="NO" id="Tuh-J0-ixL">
+                        <rect key="frame" x="0.0" y="0.0" width="50" height="42"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="y71-3L-oxx"/>
+                        </constraints>
+                    </imageView>
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="home_search_delete" translatesAutoresizingMaskIntoConstraints="NO" id="MNO-fd-c1K">
+                        <rect key="frame" x="304" y="0.0" width="50" height="41.5"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="Xbx-Rm-gMM"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Krg-4S-khk">
+                        <rect key="frame" x="58" y="0.0" width="238" height="42"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WKB-5N-YCy">
+                        <rect key="frame" x="0.0" y="40.5" width="354" height="1"/>
+                        <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="dFe-NQ-5zK"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="Krg-4S-khk" firstAttribute="leading" secondItem="Tuh-J0-ixL" secondAttribute="trailing" constant="8" id="3IT-cO-QMm"/>
+                    <constraint firstItem="Tuh-J0-ixL" firstAttribute="top" secondItem="I1e-oa-WC8" secondAttribute="top" id="Fqc-ct-rU3"/>
+                    <constraint firstAttribute="trailing" secondItem="WKB-5N-YCy" secondAttribute="trailing" id="HoA-pi-NS7"/>
+                    <constraint firstAttribute="trailing" secondItem="MNO-fd-c1K" secondAttribute="trailing" id="REc-Dt-30w"/>
+                    <constraint firstAttribute="bottom" secondItem="Tuh-J0-ixL" secondAttribute="bottom" id="Xeo-r0-ROf"/>
+                    <constraint firstItem="Krg-4S-khk" firstAttribute="top" secondItem="I1e-oa-WC8" secondAttribute="top" id="c8E-jJ-wPO"/>
+                    <constraint firstAttribute="bottom" secondItem="Krg-4S-khk" secondAttribute="bottom" id="dAp-Lq-7f4"/>
+                    <constraint firstItem="WKB-5N-YCy" firstAttribute="leading" secondItem="I1e-oa-WC8" secondAttribute="leading" id="efb-lY-lwX"/>
+                    <constraint firstItem="MNO-fd-c1K" firstAttribute="leading" secondItem="Krg-4S-khk" secondAttribute="trailing" constant="8" id="fRD-VT-qkJ"/>
+                    <constraint firstItem="MNO-fd-c1K" firstAttribute="top" secondItem="I1e-oa-WC8" secondAttribute="top" id="hCv-Re-aVz"/>
+                    <constraint firstAttribute="bottom" secondItem="MNO-fd-c1K" secondAttribute="bottom" id="klB-TC-1HT"/>
+                    <constraint firstItem="Tuh-J0-ixL" firstAttribute="leading" secondItem="I1e-oa-WC8" secondAttribute="leading" id="vnh-yc-odk"/>
+                    <constraint firstAttribute="bottom" secondItem="WKB-5N-YCy" secondAttribute="bottom" id="zkI-yr-5dl"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="label" destination="Krg-4S-khk" id="w4B-mO-DCf"/>
+            </connections>
+            <point key="canvasLocation" x="-126" y="15"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="home_search_clock" width="12" height="12"/>
+        <image name="home_search_delete" width="8" height="8"/>
+    </resources>
+</document>

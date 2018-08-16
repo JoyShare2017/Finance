@@ -1,0 +1,81 @@
+//
+//  TopicListCell.m
+//  Finance
+//
+//  Created by 赵帅 on 2018/4/8.
+//  Copyright © 2018年 郝旭珊. All rights reserved.
+//
+
+#import "TopicListCell.h"
+@interface TopicListCell()
+@property (nonatomic, strong) UILabel *titleLb;
+@property (nonatomic, strong) UILabel *contentLb;
+@property (nonatomic, strong) UIView *cutline;
+@end
+
+@implementation TopicListCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    self =[super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        _titleLb = [UILabel labelWithTextFont:FONT_BIG textColor:BLACKCOLOR];
+        _titleLb.frame=CGRectMake(MARGIN, 0, SCREEN_WIDTH-MARGIN*2, 30);
+        _contentLb=[UILabel labelWithTextFont:FONT_NORMAL textColor:GRAYCOLOR_TEXT];
+        _contentLb.frame=CGRectMake(MARGIN, 30, SCREEN_WIDTH-MARGIN*2, 30);
+
+        [self.contentView addSubview:self.titleLb];
+        [self.contentView addSubview:self.contentLb];
+
+        self.contentLb.numberOfLines = 3;
+        self.contentLb.lineBreakMode = NSLineBreakByTruncatingTail;
+
+        _cutline = [[UIView alloc]initWithFrame:CGRectMake(0, 60, SCREEN_WIDTH, 1)];
+        _cutline.backgroundColor = GRAYCOLOR_BORDER;
+        [self.contentView addSubview:_cutline];
+
+
+    }
+    return  self;
+}
+
+
+-(void)setTopicModel:(TopicListModel *)topicModel{
+
+    _topicModel=topicModel;
+    _titleLb.text=self.topicModel.subject_title;
+
+    CGRect oreg=self.contentLb.frame;
+    oreg.size.height=[NSString heightWithString:self.topicModel.subject_content_gainian size:CGSizeMake(oreg.size.width, 60) font: 14];
+    _contentLb.frame=oreg;
+    _contentLb.text=self.topicModel.subject_content_gainian;
+    _cutline = [[UIView alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(_contentLb.frame)+9, SCREEN_WIDTH, 1)];
+
+}
+
+- (void)layoutSubviews
+{
+    for (UIControl *control in self.subviews){
+        if ([control isMemberOfClass:NSClassFromString(@"UITableViewCellEditControl")]){
+            for (UIView *v in control.subviews)
+            {
+                if ([v isKindOfClass: [UIImageView class]]) {
+                    UIImageView *img=(UIImageView *)v;
+                    if (self.topicModel.isEditSelected) {
+                        img.image=[UIImage imageNamed:@"circle_tick_orange"];
+                    }else
+                    {
+                        img.image=[UIImage imageNamed:@"circle_empty"];
+                    }
+                }
+            }
+        }
+    }
+    [super layoutSubviews];
+}
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
+}
+
+@end

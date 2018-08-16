@@ -1,0 +1,145 @@
+//
+//  SearchResultController.m
+//  Finance
+//
+//  Created by 郝旭珊 on 2018/1/25.
+//  Copyright © 2018年 郝旭珊. All rights reserved.
+//
+
+#import "SearchResultController.h"
+#import "SwitchButtonView.h"
+#import "QuestionController.h"
+#import "ExpertController.h"
+#import "TopicController.h"
+#import "TopicDetailNewVC.h"
+
+@interface SearchResultController ()<UISearchBarDelegate,UIScrollViewDelegate>
+
+@property (nonatomic, strong) UIScrollView *mainScrollView;
+@property (nonatomic, strong) SwitchButtonView *switchButtonView;
+
+@end
+
+@implementation SearchResultController
+
+
+- (UIScrollView *)mainScrollView{
+    if (_mainScrollView == nil){
+        _mainScrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, SWITCH_BUTTON_VIEW_HEIGHT, SCREEN_WIDTH, SCREEN_HEIGHT-NAVGATION_MAXY-SWITCH_BUTTON_VIEW_HEIGHT-HOME_HEIGHT)];
+        _mainScrollView.delegate = self;
+        _mainScrollView.backgroundColor = [UIColor whiteColor];
+        _mainScrollView.pagingEnabled = YES;
+        _mainScrollView.showsHorizontalScrollIndicator = NO;
+        _mainScrollView.showsVerticalScrollIndicator = NO;
+    }
+    return _mainScrollView;
+}
+
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    [self configureSearchBar];
+    [self addChildControllers];
+
+    SwitchButtonView *switchButtonView = [[SwitchButtonView alloc]initWithTitles:@[@"问答",@"专家",@"专题"]];
+    switchButtonView.buttonSwitch = ^(UIButton *button) {
+        self.mainScrollView.contentOffset = CGPointMake(SCREEN_WIDTH * button.tag, 0);
+    };
+    self.switchButtonView = switchButtonView;
+    [self.view addSubview:switchButtonView];
+
+}
+
+
+//初始化UIScrollView
+-(void)addChildControllers{
+    [self.view addSubview:self.mainScrollView];
+
+    UILabel *resultCountLabel = [UILabel labelWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, BUTTON_HEIGHT) textFont:FONT_SMALL textColor:GRAYCOLOR_TEXT];
+    resultCountLabel.backgroundColor = GRAYCOLOR_BACKGROUND;
+
+    QuestionController *questionVc = [QuestionController new];
+    questionVc.searchTitle = self.searchText;
+    [questionVc didMoveToParentViewController:self];
+
+    for (UIView *subview in questionVc.view.subviews){
+        if ([subview isKindOfClass:[UITableView class]]){
+            [self addChildViewController:questionVc];
+
+            questionVc.finishedSearchQuestion = ^(NSString *searchCount) {
+                resultCountLabel.text = [NSString stringWithFormat:@"共%@个搜索结果",searchCount];
+                [resultCountLabel setFirstLineIndent:MARGIN];
+
+                if ([searchCount integerValue] > 0){
+                    [self.mainScrollView addSubview:resultCountLabel];
+                }
+            };
+
+            [subview setFrame:CGRectMake(0,BUTTON_HEIGHT, SCREEN_WIDTH, self.mainScrollView.height-BUTTON_HEIGHT)];
+            [self.mainScrollView addSubview:subview];
+
+            break;
+        }
+    }
+
+    UILabel *resultCountLabel2 = [UILabel labelWithFrame:CGRectMake(SCREEN_WIDTH, 0, SCREEN_WIDTH, BUTTON_HEIGHT) textFont:FONT_SMALL textColor:GRAYCOLOR_TEXT];
+    resultCountLabel2.backgroundColor = GRAYCOLOR_BACKGROUND;
+
+    ExpertController *expertVc = [ExpertController new];
+    expertVc.searchExpert = self.searchText;
+    for (UIView *subview in expertVc.view.subviews){
+        if ([subview isKindOfClass:[UITableView class]]){
+            [self addChildViewController:expertVc];
+
+            expertVc.finishedSearchExpert = ^(NSString *searchCount) {
+                resultCountLabel2.text = [NSString stringWithFormat:@"共%@个搜索结果",searchCount];
+                [resultCountLabel2 setFirstLineIndent:MARGIN];
+
+                if ([searchCount integerValue] > 0){
+                    [self.mainScrollView addSubview:resultCountLabel2];
+                }
+            };
+            [subview setFrame:CGRectMake(SCREEN_WIDTH,BUTTON_HEIGHT, SCREEN_WIDTH, self.mainScrollView.height-BUTTON_HEIGHT)];
+            [self.mainScrollView addSubview:subview];
+            break;
+        }
+    }
+
+    TopicController *topicVc = [TopicController new];
+    topicVc.searchTag = self.searchText;
+    [self addChildViewController:topicVc];
+    [topicVc.view setFrame:CGRectMake(SCREEN_WIDTH*2, 0, SCREEN_WIDTH, self.mainScrollView.height)];
+    [self.mainScrollView addSubview:topicVc.view];
+    self.mainScrollView.contentSize = CGSizeMake(SCREEN_WIDTH * 3, 0);
+    topicVc.finishedClickTopicAction = ^(NSString *topicId) {
+        TopicDetailNewVC *vc = [TopicDetailNewVC new];
+        vc.topicId = topicId;
+        [self.navigationController pushViewController:vc animated:YES];
+    };
+}
+
+
+- (void)configureSearchBar{
+    UITextField *textField = [[UITextField alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH-100, 36)];
+    textField.borderStyle = UITextBorderStyleRoundedRect;
+    textField.textColor = BLACKCOLOR;
+    textField.font = FONT_NORMAL;
+    textField.text = self.searchText;
+    textField.textAlignment = NSTextAlignmentCenter;
+    textField.layer.cornerRadius = textField.height/2;
+    textField.layer.masksToBounds = YES;
+    self.navigationItem.titleView = textField;
+}
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    double index_ = scrollView.contentOffset.x / SCREEN_WIDTH;
+    self.switchButtonView.selectedIndex = (int)(index_+0.5);
+}
+
+
+@end
+
+

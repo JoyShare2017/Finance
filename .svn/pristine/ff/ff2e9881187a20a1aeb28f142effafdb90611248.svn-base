@@ -1,0 +1,403 @@
+//
+//  CallCameraController.m
+//  Finance
+//
+//  Created by 郝旭珊 on 2018/1/16.
+//  Copyright © 2018年 郝旭珊. All rights reserved.
+//
+
+#import "CallCameraController.h"
+#import "TZImagePickerController.h"
+#import "TZImageManager.h"
+#import <AVFoundation/AVFoundation.h>
+
+#define imageW (SCREEN_WIDTH-MARGIN*5)/4
+
+@interface CallCameraController ()<TZImagePickerControllerDelegate,UINavigationControllerDelegate>
+
+@property (nonatomic, strong) UIImagePickerController *imagePickerVc;
+@property (nonatomic, strong) UIButton *callCameraButton;
+
+@property (nonatomic, strong) NSMutableArray *photos;
+@property (nonatomic, strong) NSMutableArray *selectedAssets;
+@property (nonatomic, strong) NSMutableArray *imageURLs;
+
+@end
+
+@implementation CallCameraController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setupImageUI];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+
+#pragma mark - 懒加载
+
+- (NSMutableArray *)photos{
+    if (_photos == nil){
+        _photos = [NSMutableArray array];
+    }
+    return _photos;
+}
+
+- (UIImagePickerController *)imagePickerVc {
+    if (_imagePickerVc == nil) {
+        _imagePickerVc = [[UIImagePickerController alloc] init];
+        _imagePickerVc.delegate = self;
+        // set appearance / 改变相册选择页的导航栏外观
+        if (iOS7Later) {
+            _imagePickerVc.navigationBar.barTintColor = self.navigationController.navigationBar.barTintColor;
+        }
+        _imagePickerVc.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
+        UIBarButtonItem *tzBarItem, *BarItem;
+        if (iOS9Later) {
+            tzBarItem = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[TZImagePickerController class]]];
+            BarItem = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UIImagePickerController class]]];
+        } else {
+            tzBarItem = [UIBarButtonItem appearanceWhenContainedIn:[TZImagePickerController class], nil];
+            BarItem = [UIBarButtonItem appearanceWhenContainedIn:[UIImagePickerController class], nil];
+        }
+        NSDictionary *titleTextAttributes = [tzBarItem titleTextAttributesForState:UIControlStateNormal];
+        [BarItem setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
+        
+    }
+    return _imagePickerVc;
+}
+
+
+
+- (NSMutableArray *)imageURLs{
+    if (_imageURLs == nil){
+        _imageURLs = [NSMutableArray array];
+    }
+    return _imageURLs;
+}
+
+
+#pragma mark - 设置图片组界面
+
+- (void)setupImageUI{
+    self.imageContentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 100)];
+    [self.view addSubview:self.imageContentView];
+    
+    UIButton *callCameraButton = [UIButton buttonWithFrame:CGRectMake(MARGIN, MARGIN, imageW, imageW) title:@"+照片(选填)" font:FONT_NORMAL titleColor:GRAYCOLOR_TEXT_LIGHT backgroundColor:[UIColor clearColor] target:self actionName:@"callCameraOptions"];
+    callCameraButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    callCameraButton.layer.borderColor = GRAYCOLOR_BORDER.CGColor;
+    callCameraButton.layer.borderWidth = 1;
+    self.callCameraButton = callCameraButton;
+    [self.imageContentView addSubview:callCameraButton];
+    [self.imageContentView setHeight:callCameraButton.maxY+MARGIN];
+    
+}
+
+
+
+#pragma mark - 响应事件
+
+- (void)callCameraOptions{
+    __weak typeof(self) weakSelf = self;
+
+    [self jxt_showActionSheetWithTitle:nil message:nil appearanceProcess:^(JXTAlertController * _Nonnull alertMaker) {
+        alertMaker.addActionDefaultTitle(@"相机").
+        addActionDefaultTitle(@"去相册选择").
+        addActionCancelTitle(@"取消");
+
+    } actionsBlock:^(NSInteger buttonIndex, UIAlertAction * _Nonnull action, JXTAlertController * _Nonnull alertSelf) {
+        if ([action.title isEqualToString:@"相机"] ){
+            [weakSelf judgeAuthorization];
+
+        }else if ([action.title isEqualToString:@"去相册选择"]){
+            [weakSelf showImagePickerController];
+
+        }else{
+            [alertSelf dismissViewControllerAnimated:YES completion:nil];
+        }
+
+    }];
+
+}
+
+
+
+//判断权限
+- (void)judgeAuthorization {
+
+    __weak typeof(self) weakSelf = self;
+    AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+    if ((authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied) && iOS7Later) {
+        // 无相机权限 做一个友好的提示
+        [self jxt_showAlertWithTitle:@"无法使用相机" message:@"请在iPhone的""设置-隐私-相机""中允许访问相机"  appearanceProcess:^(JXTAlertController * _Nonnull alertMaker) {
+            alertMaker.addActionDefaultTitle(@"确定");
+            alertMaker.addActionCancelTitle(@"取消");
+
+        } actionsBlock:^(NSInteger buttonIndex, UIAlertAction * _Nonnull action, JXTAlertController * _Nonnull alertSelf) {
+            if([action.title isEqualToString:@"确定"]){
+                [weakSelf openSettingInterface];
+            }else{
+                [alertSelf dismissViewControllerAnimated:YES completion:nil];
+            }
+        }];
+
+
+    } else if (authStatus == AVAuthorizationStatusNotDetermined) {
+        // fix issue 466, 防止用户首次拍照拒绝授权时相机页黑屏
+        if (iOS7Later) {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                if (granted) {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        [self judgeAuthorization];
+                    });
+                }
+            }];
+        } else {
+            [self judgeAuthorization];
+        }
+        
+        // 拍照之前还需要检查相册权限
+    } else if ([TZImageManager authorizationStatus] == 2) {
+        // 已被拒绝，没有相册权限，将无法保存拍的照片
+//        [self alertWithTitle:@"无法访问相册" message:@"请在iPhone的""设置-隐私-相册""中允许访问相册" sureTitle:@"设置" sureHandler:^(UIAlertAction *action) {
+//            [self openSettingInterface];
+//        }];
+
+        [self jxt_showAlertWithTitle:@"无法访问相册" message:@"请在iPhone的""设置-隐私-相机""中允许访问相册"  appearanceProcess:^(JXTAlertController * _Nonnull alertMaker) {
+            alertMaker.addActionDefaultTitle(@"确定");
+            alertMaker.addActionCancelTitle(@"取消");
+
+        } actionsBlock:^(NSInteger buttonIndex, UIAlertAction * _Nonnull action, JXTAlertController * _Nonnull alertSelf) {
+            if([action.title isEqualToString:@"确定"]){
+                [weakSelf openSettingInterface];
+            }else{
+                [alertSelf dismissViewControllerAnimated:YES completion:nil];
+            }
+        }];
+
+    } else if ([TZImageManager authorizationStatus] == 0) {
+        // 未请求过相册权限
+        [[TZImageManager manager] requestAuthorizationWithCompletion:^{
+            [self judgeAuthorization];
+        }];
+    } else {
+        [self callCamera];
+    }
+    
+}
+
+
+//打开手机的设置界面
+- (void)openSettingInterface{
+    // 去设置界面，开启相机访问权限
+    if (@available(iOS 10.0, *)) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString] options:@{} completionHandler:^(BOOL success) {
+        }];
+    } else {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        
+    }
+    
+}
+
+
+// 调用相机
+- (void)callCamera {
+    if ([UIImagePickerController isSourceTypeAvailable: UIImagePickerControllerSourceTypeCamera]) {
+        self.imagePickerVc.sourceType =  UIImagePickerControllerSourceTypeCamera;
+        self.imagePickerVc.modalPresentationStyle = UIModalPresentationFullScreen;
+        self.imagePickerVc.mediaTypes = @[(NSString *)kUTTypeImage];
+        self.imagePickerVc.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+        //跳转到UIImagePickerController控制器弹出相机
+        [self presentViewController:self.imagePickerVc animated:YES completion:nil];
+        
+    } else {
+        NSLog(@"模拟器中无法打开照相机,请在真机中使用");
+    }
+}
+
+
+#pragma mark - UIImagePickerController
+
+- (void)imagePickerController:(UIImagePickerController*)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    //获取到的图片
+    NSString *type = [info objectForKey:UIImagePickerControllerMediaType];
+    if ([type isEqualToString:@"public.image"]) {
+        TZImagePickerController *tzImagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:1 delegate:self];
+        tzImagePickerVc.sortAscendingByModificationDate = YES;
+        [tzImagePickerVc showProgressHUD];
+        UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+        
+        [self.photos addObject:image];
+        [self addImage];
+        
+    }else{
+        DebugLog(@"获取相机拍摄的照片失败");
+    }
+    
+    
+}
+
+
+- (void)savePhoto:(TZImagePickerController *)tzImagePickerVc image:(UIImage *)image{
+    [[TZImageManager manager] getCameraRollAlbum:NO allowPickingImage:YES completion:^(TZAlbumModel *model) {
+        [[TZImageManager manager] getAssetsFromFetchResult:model.result allowPickingVideo:NO allowPickingImage:YES completion:^(NSArray<TZAssetModel *> *models) {
+            [tzImagePickerVc hideProgressHUD];
+            TZAssetModel *assetModel = [models firstObject];
+            if (tzImagePickerVc.sortAscendingByModificationDate) {
+                assetModel = [models lastObject];
+            }
+            TZImagePickerController *imagePicker = [[TZImagePickerController alloc] initCropTypeWithAsset:assetModel.asset photo:image completion:^(UIImage *cropImage, id asset) {
+                [self refreshImageWithAddedAsset:asset image:cropImage];
+            }];
+            imagePicker.needCircleCrop = YES;
+            imagePicker.circleCropRadius = 100;
+            [self presentViewController:imagePicker animated:YES completion:nil];
+            
+        }];
+    }];
+}
+
+
+- (void)refreshImageWithAddedAsset:(id)asset image:(UIImage *)image {
+    [self.selectedAssets addObject:asset];
+    [self.photos addObject:image];
+    [self addImage];
+    
+    if ([asset isKindOfClass:[PHAsset class]]) {
+        PHAsset *phAsset = asset;
+        NSLog(@"location:%@",phAsset.location);
+    }
+}
+
+
+
+- (void)showImagePickerController{
+    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:6 delegate:self];
+    imagePickerVc.allowTakePicture = NO;
+    imagePickerVc.allowPickingOriginalPhoto = NO;
+    imagePickerVc.isSelectOriginalPhoto = YES;
+    imagePickerVc.allowCrop = YES;
+    
+    //设置外观
+    imagePickerVc.naviBgColor = MAJORCOLOR;
+    imagePickerVc.navigationBar.translucent = NO;
+    imagePickerVc.doneBtnTitleStr = @"完成";
+    imagePickerVc.cancelBtnTitleStr = @"取消";
+    imagePickerVc.previewBtnTitleStr = @"预览";
+    
+    //设置目前已经选中的图片数组
+    imagePickerVc.selectedAssets = _selectedAssets;
+    
+    // 你可以通过block或者代理，来得到用户选择的照片.
+    [imagePickerVc setDidFinishPickingPhotosHandle:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
+        _selectedAssets = [NSMutableArray arrayWithArray:assets];
+        self.photos = [NSMutableArray arrayWithArray:photos];
+        [self addImage];
+    }];
+    [self presentViewController:imagePickerVc animated:YES completion:nil];
+}
+
+
+#pragma mark - 图片事件
+
+- (void)addImage{
+    for(UIView *subview in self.imageContentView.subviews){
+        if ([subview isKindOfClass:[UIImageView class]]){
+            [subview removeFromSuperview];
+        }
+    }
+    
+    [self.photos enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        UIImage *image = obj;
+        UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+        CGFloat imageX = (idx%4)*(imageW+MARGIN)+MARGIN;
+        CGFloat imageY = (idx/4)*(imageW+MARGIN)+MARGIN;
+        imageView.frame = CGRectMake(imageX,imageY, imageW, imageW);
+        imageView.userInteractionEnabled = YES;
+        imageView.tag = idx;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(deleteImage:)];
+        [imageView addGestureRecognizer:tap];
+        [self.imageContentView addSubview:imageView];
+
+        UIImage *deleteImage = [UIImage imageNamed:@"delete_x"];
+        UIImageView *deleteImageView = [[UIImageView alloc]initWithFrame:CGRectMake(imageView.width-deleteImage.size.width, 0, deleteImage.size.width, deleteImage.size.height)];
+        deleteImageView.image = deleteImage;
+        [imageView addSubview:deleteImageView];
+        
+        if (idx == self.photos.count-1){
+            [self.imageContentView setHeight:imageView.maxY+MARGIN];
+        }
+    }];
+    
+    if (self.photos.count >= 6){
+        return;
+    }
+    long int i = self.photos.count;
+    CGFloat imageX = (i%4)*(imageW+MARGIN)+MARGIN;
+    CGFloat imageY = (i/4)*(imageW+MARGIN)+MARGIN;
+    self.callCameraButton.frame = CGRectMake(imageX,imageY, imageW, imageW);
+    
+}
+
+
+- (void)deleteImage:(UITapGestureRecognizer *)tap{
+    __weak typeof(self) weakSelf = self;
+    UIView *imageView = tap.view;
+    [self jxt_showAlertWithTitle:@"提示" message:@"确定删除这张照片吗"  appearanceProcess:^(JXTAlertController * _Nonnull alertMaker) {
+        alertMaker.addActionDefaultTitle(@"确定");
+        alertMaker.addActionCancelTitle(@"取消");
+
+    } actionsBlock:^(NSInteger buttonIndex, UIAlertAction * _Nonnull action, JXTAlertController * _Nonnull alertSelf) {
+        if([action.title isEqualToString:@"确定"]){
+            [weakSelf.photos removeObjectAtIndex:imageView.tag];
+            [weakSelf.selectedAssets removeObjectAtIndex:imageView.tag];
+            [weakSelf addImage];
+
+        }else{
+            [alertSelf dismissViewControllerAnimated:YES completion:nil];
+        }
+    }];
+
+//    [self alertWithTitle:@"提示" message:@"确定删除这张照片吗?" sureTitle:@"确定" sureHandler:^(UIAlertAction *action) {
+//        [self.photos removeObjectAtIndex:imageView.tag];
+//        [self.selectedAssets removeObjectAtIndex:imageView.tag];
+//        [self addImage];
+//    }];
+}
+
+
+
+- (void)uploadImageSuccess:(void(^)(NSArray *))finishedUploadImage{
+    [self showHudInView:self.view hint:@"上传中..."];
+    NSString *urlString = [OPENAPIHOST stringByAppendingString:@"member/index/upload_image"];
+
+    dispatch_group_t group = dispatch_group_create();
+    for (UIImage *image in self.photos){
+        //进组
+        dispatch_group_enter(group);
+        NSData *imageData = UIImagePNGRepresentation(image);
+        [[NetworkManager sharedManager]uploadImage:urlString parameters:nil imageData:imageData severImageFieldName:@"image" callback:^(NetworkResult resultCode, id responseObject) {
+            //出组
+            dispatch_group_leave(group);
+            if (resultCode != NetworkResultSuceess){
+                [self showHint:@"图片上传失败,请稍后重试"];
+            }else{
+                [self.imageURLs addObject:(NSString *)responseObject];
+            }
+        }];
+
+    }
+
+    dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+        [self hideHud];
+        DebugLog(@"图片全部上传成功");
+        finishedUploadImage(self.imageURLs);
+    });
+
+
+}
+@end

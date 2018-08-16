@@ -1,0 +1,206 @@
+//
+//  NetworkManager.m
+//  Fitness
+//
+//  Created by apple on 2017/10/11.
+//  Copyright © 2017年 北京易魔方. All rights reserved.
+//
+
+#import "NetworkManager.h"
+
+#define NONETWORKMESSAGE @"网络环境不佳"
+#define ERRORMESSAGE @"服务器开小差了"
+#define LOADING @"加载中..."
+
+/// 网络工具协议
+@protocol NetworkManagerProtocol <NSObject>
+
+/// 网络请求方法
+///
+/// @param method     HTTP 请求方法
+/// @param URLString  URLString
+/// @param parameters 参数字典
+/// @param success    成功回调
+/// @param failure    失败回调
+///
+/// @return NSURLSessionDataTask
+@optional
+
+- (NSURLSessionDataTask *)dataTaskWithHTTPMethod:(NSString *)method
+                                         URLString:(NSString *)URLString
+                                        parameters:(id)parameters
+                                    uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
+                                  downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
+                                           success:(void (^)(NSURLSessionDataTask *, id))success
+                                           failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
+@end
+
+
+/// 遵守网络协议 - 为了能够欺骗 Xcode 给一个智能提示，以及编译通过！
+@interface NetworkManager()<NetworkManagerProtocol>
+@property (nonatomic, assign) BOOL isNetworkReachable;
+@end
+
+@implementation NetworkManager
+
+
+#pragma mark 创建单例
++ (instancetype) sharedManager
+{
+    static NetworkManager *instance;
+    static dispatch_once_t onceToken ;
+    dispatch_once(&onceToken, ^{
+        instance = [[super allocWithZone:NULL] init] ;
+    });
+    
+    //instance.responseSerializer = [AFHTTPResponseSerializer serializer];
+//    instance.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", nil];
+    instance.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/plain", @"multipart/form-data", @"application/json", @"text/json",@"text/javascript", @"text/html", @"image/jpeg", @"image/png", @"application/octet-stream", nil];
+
+
+    return instance ;
+}
+
+
++(id) allocWithZone:(struct _NSZone *)zone
+{
+    return [NetworkManager sharedManager] ;
+}
+
+
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+    return [NetworkManager sharedManager] ;
+}
+
+
+//用方法包一层是防止属性放在外面被更改
+- (BOOL)isNetworkAvailable {
+    return self.isNetworkReachable;
+}
+
+
+- (instancetype)init {
+    if ((self = [super init])) {
+        // 设置超时时间，afn默认是60s
+        self.requestSerializer.timeoutInterval = 30;
+        // 响应格式添加text/plain
+        self.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/plain", nil];
+        // 监听网络状态,每当网络状态发生变化就会调用此block
+        __weak typeof(self) weakSelf = self;
+        [self.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+            switch (status) {
+                case AFNetworkReachabilityStatusNotReachable:     // 无连线
+                    DebugLog(@"AFNetworkReachability Not Reachable");
+                    weakSelf.isNetworkReachable = NO;
+                    break;
+                case AFNetworkReachabilityStatusReachableViaWWAN: // 手机自带网络
+                    weakSelf.isNetworkReachable = YES;
+                    DebugLog(@"AFNetworkReachability Reachable via WWAN");
+                    break;
+                case AFNetworkReachabilityStatusReachableViaWiFi: // WiFi
+                    weakSelf.isNetworkReachable = YES;
+                    DebugLog(@"AFNetworkReachability Reachable via WiFi");
+                    break;
+                case AFNetworkReachabilityStatusUnknown:// 未知网络
+                    weakSelf.isNetworkReachable = YES;
+                    DebugLog(@"AFNetworkReachability Unknown");
+                    break;
+                default:
+                    weakSelf.isNetworkReachable = YES;
+                    break;
+            }
+        }];
+        // 开始监听
+        [self.reachabilityManager startMonitoring];
+    }
+    return self;
+}
+
+
+- (void)request:(HTTPMethod)method
+      URLString:(NSString *)URLString
+     parameters:(id)parameters
+       callback:(NetworkRequestCallback)callback{
+
+
+
+    NSString *methodName = (method == GET) ? @"GET" : @"POST";
+    
+    // dataTaskWithHTTPMethod本类没有实现方法，但是父类实现了
+    // 在调用方法的时候，如果本类没有提供，直接调用父类的方法，AFN 内部已经实现！
+    //!！！如果AFN库这个方法更新了，这里要换
+    [[self dataTaskWithHTTPMethod:methodName URLString:URLString parameters:parameters uploadProgress:nil downloadProgress:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSDictionary *responseDict = responseObject;
+        NSNumber *statusCode = responseDict[@"status"];
+        if ([statusCode intValue] == 200){
+            callback(NetworkResultSuceess,responseDict[@"data"]);
+        }else if ([statusCode intValue] == 800||[statusCode intValue] == 401){
+            callback(NetworkResultNODATASUCCESS,responseDict[@"info"]);
+        }else{
+            callback(NetworkResultError,responseDict[@"info"]);
+        }
+//        DebugLog(@"----请求%@-----结果:%@", URLString,responseDict);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        callback(NetworkResultError,ERRORMESSAGE);
+//        DebugLog(@"----请求%@----响应%@-----错误原因:%@", task.originalRequest,task.response,error.debugDescription);
+
+    }] resume];
+    
+}
+
+
+/**
+ * 上传单张图片
+ * @parameter: severImageFieldName 远程服务中接收文件使用的字段名称
+ */
+- (void)uploadImage:(NSString *)URLString
+         parameters:(id)parameters
+         imageData:(NSData *)imageData
+severImageFieldName:(NSString *)name
+           callback:(NetworkRequestCallback)callback{
+    
+    if (![self isNetworkAvailable]){
+        callback(NetworkResultNotReachable,NONETWORKMESSAGE);
+    }
+    
+    [self POST:URLString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        // formData: 专门用于拼接需要上传的数据,在此位置生成一个要上传的数据体
+        //        NSArray *names = @[@"a",@"b",@"c",@"d",@"e",@"f",@"g",@"h",@"i"];
+//        for(int i=0;i<images.count;i++){
+            // 在网络开发中，上传文件时，是文件不允许被覆盖，文件重名
+            // 要解决此问题，
+            // 可以在上传时使用当前的系统事件作为文件名
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            // 设置时间格式
+            [formatter setDateFormat:@"yyyyMMddHHmmss"];
+            NSString *dateString = [formatter stringFromDate:[NSDate date]];
+            NSString *fileName = [NSString  stringWithFormat:@"ios%@.jpg", dateString];
+            //            NSString *name = [NSString stringWithFormat:@"img%@", names[i]];
+            /*
+             *该方法的参数
+             1. fileData:   要上传文件的数据
+             2. name:       负责上传文件的远程服务中接收文件使用的字段名称
+             3. fileName：   要上传文件的文件名
+             4. mimeType：   要上传文件的文件类型
+             */
+            [formData appendPartWithFileData:imageData name:name fileName:fileName mimeType:@"image/jpeg"];
+            
+//        }
+    } progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *responseDict = responseObject;
+        NSNumber *statusCode = responseDict[@"status"];
+        if ([statusCode intValue] == 200){
+            callback(NetworkResultSuceess,responseDict[@"data"]);
+        }else{
+            callback(NetworkResultError,responseDict[@"info"]);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        callback(NetworkResultError,ERRORMESSAGE);
+    }];
+
+}
+
+
+
+@end
