@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
-
++(UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;//生成纯色图片
 @property (strong, nonatomic) UIWindow *window;
 
 

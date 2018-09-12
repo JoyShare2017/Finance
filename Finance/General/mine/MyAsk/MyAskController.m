@@ -45,7 +45,7 @@
 
 - (UITableView *)tableView{
     if (_tableView == nil){
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, SWITCH_BUTTON_VIEW_HEIGHT, SCREEN_WIDTH, USEABLE_VIEW_HEIGHT-SWITCH_BUTTON_VIEW_HEIGHT) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, USEABLE_VIEW_HEIGHT) style:UITableViewStylePlain];
         _tableView.allowsMultipleSelection = YES;
         [_tableView registerClass:[MyAskCell class] forCellReuseIdentifier:@"MyAskCell"];
         [_tableView registerClass:[MyConsultCell class] forCellReuseIdentifier:@"MyConsultCell"];
@@ -64,17 +64,17 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(edit:)];
 
 
-    SwitchButtonView *switchButtonView = [[SwitchButtonView alloc] initWithTitles:@[@"我的提问",@"我的咨询"]];
-     __weak typeof(self) weakSelf = self;
-    switchButtonView.buttonSwitch = ^(UIButton *sender) {
-        [weakSelf hideCommonEmptyViewWithView:weakSelf.tableView];
-        self.selectedIndex = sender.tag;
-        if (sender.tag == 1 && self.consults.count <= 0){
-            [self loadMyConsultDataList];
-        }
-        [self.tableView reloadData];
-    };
-    [self.view addSubview:switchButtonView];
+//    SwitchButtonView *switchButtonView = [[SwitchButtonView alloc] initWithTitles:@[@"我的提问",@"我的咨询"]];
+//     __weak typeof(self) weakSelf = self;
+//    switchButtonView.buttonSwitch = ^(UIButton *sender) {
+//        [weakSelf hideCommonEmptyViewWithView:weakSelf.tableView];
+//        self.selectedIndex = sender.tag;
+//        if (sender.tag == 1 && self.consults.count <= 0){
+//            [self loadMyConsultDataList];
+//        }
+//        [self.tableView reloadData];
+//    };
+//    [self.view addSubview:switchButtonView];
     [self.view addSubview:self.tableView];
 //    self.tableView.emptyDataSetSource=self;
 //    self.tableView.emptyDataSetDelegate=self;

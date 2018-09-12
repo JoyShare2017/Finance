@@ -35,8 +35,8 @@
         _headLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:13];
         _headLabel.textColor = [UIColor whiteColor];
         _headLabel.text = @"会计概念";
-        _headLabel.frame = CGRectMake(24, 0, 150, self.frame.size.height);
-        
+        _headLabel.frame = CGRectMake(24, 0,SCREEN_WIDTH-90-24-56, self.frame.size.height);
+        _headLabel.numberOfLines=2;
         
         
     }

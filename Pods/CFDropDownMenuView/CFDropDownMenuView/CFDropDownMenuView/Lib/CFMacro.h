@@ -42,4 +42,7 @@
 #define CFScreenWidth  ([UIScreen mainScreen].bounds.size.width)
 #define CFScreenHeight  ([UIScreen mainScreen].bounds.size.height)
 
+#define KNAVI_HEIGHT  ([UIScreen mainScreen].bounds.size.height >= 812.0 ? 88.0 : 64.0)
+#define KTABBAR_HEIGHT  ([UIScreen mainScreen].bounds.size.height >= 812.0 ? 83.0 : 49.0)
+
 #endif /* CFMacro_h */

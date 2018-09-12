@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ProjectTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIView *poloView;
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-
+@property (strong, nonatomic)  UIView *poloView;
+@property (strong, nonatomic)  UBLabel *nameLabel;
+@property(nonatomic,copy)NSString* title;
 @end

@@ -50,16 +50,16 @@
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(edit:)];
 
-    SwitchButtonView *switchButtonView = [[SwitchButtonView alloc] initWithTitles:@[@"问题回答",@"咨询回答"]];
-    switchButtonView.buttonSwitch = ^(UIButton *sender) {
-        self.selectedIndex = sender.tag;
-        if (sender.tag == 1 && self.consults.count <= 0){
-            [self loadMyConsultDataList];
-        }
-        [self.tableView reloadData];
-    };
-    [self.view addSubview:switchButtonView];
-    self.tableView.frame=CGRectMake(0, CGRectGetMaxY(switchButtonView.frame), SCREEN_WIDTH, SCREEN_HEIGHT-NAVGATION_MAXY-switchButtonView.frame.size.height-HOME_HEIGHT);
+//    SwitchButtonView *switchButtonView = [[SwitchButtonView alloc] initWithTitles:@[@"问题回答",@"咨询回答"]];
+//    switchButtonView.buttonSwitch = ^(UIButton *sender) {
+//        self.selectedIndex = sender.tag;
+//        if (sender.tag == 1 && self.consults.count <= 0){
+//            [self loadMyConsultDataList];
+//        }
+//        [self.tableView reloadData];
+//    };
+//    [self.view addSubview:switchButtonView];
+    self.tableView.frame=CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT-NAVGATION_MAXY-HOME_HEIGHT);
 
     [self setupDeleteView];
     [self loadMyAnswerDataList];

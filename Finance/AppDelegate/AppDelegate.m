@@ -11,6 +11,7 @@
 #import <UMSocialCore/UMSocialCore.h>
 #import "WXApi.h"
 #import <AlipaySDK/AlipaySDK.h>
+#import "UMMobClick/MobClick.h"
 @interface AppDelegate ()<WXApiDelegate>
 
 @end
@@ -39,6 +40,10 @@
         NSLog(@"log : %@", log);
     }];
     [WXApi registerApp:@"wx8d9ac9748812ef16" enableMTA:YES];
+    //20180905zs友盟统计
+    UMConfigInstance.appKey = @"5ad58c96f43e484c9c000270";
+    [MobClick startWithConfigure:UMConfigInstance];
+    [MobClick setLogEnabled:YES];
     return YES;
 }
 -(void)onResp:(BaseResp*)resp{
@@ -47,6 +52,7 @@
         [[NSNotificationCenter defaultCenter]postNotificationName:KPayResultKey object:@"1"];
     }else{
         [[NSNotificationCenter defaultCenter]postNotificationName:KPayResultKey object:@"0"];
+        
     }
 }
 - (void)confitUShareSettings
@@ -141,7 +147,17 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 }
 
-
++(UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size
+{
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }

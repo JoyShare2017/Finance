@@ -54,7 +54,7 @@
     cell.frame = CGRectMake(0, 0, SCREEN_WIDTH, 180);
 //    cell.describeLabel.hidden = YES;
     cell.bookModel = model;
-    cell.button.hidden=YES;
+    cell.isBookDetailPage=YES;
     [self.view addSubview:cell];
 
     label = [UILabel labelWithFirstIndent:10 frame:CGRectMake(0, cell.maxY, SCREEN_WIDTH, 40) text:@"内容简介" textFont:FONT_SMALL textColor:MAJORCOLOR backgroundColor:GRAYCOLOR_BACKGROUND];

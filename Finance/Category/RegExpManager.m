@@ -147,13 +147,18 @@
 +(BOOL)validatePassword:(NSString*)str
 {
     //    至少六位必须包括数字、字母、特殊符号
-    NSString* patternStr = @"^(?![^a-zA-Z]+$)(?!\\D+$)(?![^@#$%^&*_]+$).{6,20}$";
-    NSRegularExpression* regexp = [[NSRegularExpression alloc]initWithPattern:patternStr options:NSRegularExpressionCaseInsensitive error:nil];
-    NSUInteger numberOfMatch = [regexp numberOfMatchesInString:str options:NSMatchingReportProgress range:NSMakeRange(0, str.length)];
-    if(numberOfMatch > 0)
-    {
+//    NSString* patternStr = @"^(?![^a-zA-Z]+$)(?!\\D+$)(?![^@#$%^&*_]+$).{6,20}$";
+//    NSRegularExpression* regexp = [[NSRegularExpression alloc]initWithPattern:patternStr options:NSRegularExpressionCaseInsensitive error:nil];
+//    NSUInteger numberOfMatch = [regexp numberOfMatchesInString:str options:NSMatchingReportProgress range:NSMakeRange(0, str.length)];
+//    if(numberOfMatch > 0)
+//    {
+//        return YES;
+//    }
+    
+    if ([str rangeOfString:@" "].location==NSNotFound) {
         return YES;
     }
+    
     return NO;
 }
 @end

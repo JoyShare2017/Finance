@@ -51,4 +51,8 @@
 #import "UBTableviewTool.h"
 #import "NoDataCell.h"
 #import "NSObject+KCommonEmptyView.h"
+
+#import "UBBTextView.h"
+#import "UBLabel.h"
+#import "UBLabel+FastBuild.h"
 #endif /* PrefixHeader_pch */

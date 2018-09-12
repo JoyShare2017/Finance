@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface ProjectCollectionViewCell : UICollectionViewCell
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (strong, nonatomic)  UBLabel *nameLabel;
 
 @end

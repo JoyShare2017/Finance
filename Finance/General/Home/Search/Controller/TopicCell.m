@@ -31,7 +31,9 @@
         self.webView = [[UIWebView alloc]initWithFrame:CGRectMake(0, 30, SCREEN_WIDTH, 100)];
         self.webView.delegate = self;
         self.webView.scrollView.bounces = NO;
+        self.webView.scrollView.scrollEnabled=NO;
         [self.contentView addSubview:self.webView];
+       
 
     }
 
@@ -52,7 +54,7 @@
 
 -(void)setCellHeight:(CGFloat)cellHeight{
     _cellHeight=cellHeight;
-    _webView .frame=CGRectMake(0, 30, SCREEN_WIDTH,     _cellHeight=cellHeight);
+    _webView .frame=CGRectMake(0, 30, SCREEN_WIDTH, _cellHeight-30);
 
 }
 

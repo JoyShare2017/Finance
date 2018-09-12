@@ -186,15 +186,15 @@ typedef void(^HUDHideBlock)();
 
 -(void)saveAddress{
     if (self.nameTf.text.length<=0) {
-        [[KCCommonAlertBlock defaultAlertBlock]showShortAlertWithController:self andMessage:@"请输入联系人"];
+        [self showHint:@"请输入联系人"];
     }else if (self.phoneTf.text.length<=0){
-        [[KCCommonAlertBlock defaultAlertBlock]showShortAlertWithController:self andMessage:@"请输入联系电话"];
+        [self showHint:@"请输入联系电话"];
     }else if (self.sectionTf.text.length<=0){
-        [[KCCommonAlertBlock defaultAlertBlock]showShortAlertWithController:self andMessage:@"请选择区域"];
+        [self showHint:@"请选择区域"];
     }else if (self.addressTextv.text.length<=0){
-        [[KCCommonAlertBlock defaultAlertBlock]showShortAlertWithController:self andMessage:@"请输入详细地址"];
+        [self showHint:@"请输入详细地址"];
     }else if (self.addressTextv.text.length<5){
-        [[KCCommonAlertBlock defaultAlertBlock]showShortAlertWithController:self andMessage:@"详细地址不少于5个字"];
+        [self showHint:@"详细地址不少于5个字"];
     }else{
         
         //请求服务器

@@ -7,14 +7,18 @@
 //
 
 #import "RegisterController.h"
-
+#import "RegExpManager.h"
 @interface RegisterController ()
 @property (weak, nonatomic) IBOutlet UITextField *phoneTf;
 @property (weak, nonatomic) IBOutlet UITextField *verifyTf;
+
+
+
 @property (weak, nonatomic) IBOutlet UITextField *passwordTf;
+@property (weak, nonatomic) IBOutlet UITextField *passwordAgainTf;
 @property (nonatomic, weak) NSTimer *timer;
 @property (nonatomic, assign) NSInteger timerRunCount;
-
+@property(nonatomic,copy)NSString* yazhengma;
 @end
 
 @implementation RegisterController
@@ -22,13 +26,18 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"注册";
+    _yazhengma=@"";
     _passwordTf.secureTextEntry = YES;
 }
 
 
 - (IBAction)sendVerifyCodeAction:(id)sender {
-
+    if (_phoneTf.text.length==0) {
+        [self showHint:_phoneTf.placeholder];
+        return;
+    }
     self.sendbtn.userInteractionEnabled=NO;
+    [self showHudInView:self.view];
 
   /* 接口：member/index/send_phone_code
      参数：00
@@ -36,6 +45,8 @@
     NSString *urlStr = [OPENAPIHOST stringByAppendingString:@"member/index/send_phone_code"];
     NSDictionary *parameter = @{@"phoneNum": self.phoneTf.text};
     [[NetworkManager sharedManager]request:POST URLString:urlStr parameters:parameter callback:^(NetworkResult resultCode, id responseObject) {
+        _yazhengma=@"";
+        [self hideHud];
         if (resultCode != NetworkResultSuceess){
             [self showHint:(NSString *)responseObject];
             self.sendbtn.userInteractionEnabled=YES;
@@ -44,8 +55,7 @@
             self.timer= [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timerRun:) userInfo:nil repeats:YES];
             [self.timer fire];
             [self showHint:@"验证码已发送到手机上"];
-//            [self showHint:[NSString stringWithFormat:@"您的验证码是%@",responseObject[@"phonecode"]]];
-
+            _yazhengma=[NSString stringWithFormat:@"%@",responseObject[@"phonecode"]];
 
         }
         
@@ -66,6 +76,11 @@
 }
 - (IBAction)isHidePasswordAction:(UIButton *)sender {
     _passwordTf.secureTextEntry = sender.selected;
+    sender.selected = !sender.selected;
+}
+
+- (IBAction)seeAgainPwd:(UIButton *)sender {
+    _passwordAgainTf.secureTextEntry = sender.selected;
     sender.selected = !sender.selected;
 }
 
@@ -105,6 +120,35 @@
 
 
 - (IBAction)registerAction:(id)sender {
+    if (_phoneTf.text.length==0) {
+        [self showHint:_phoneTf.placeholder];
+        return;
+    }
+    if (_verifyTf.text.length==0) {
+        [self showHint:_verifyTf.placeholder];
+        return;
+    }
+    if (_passwordTf.text.length==0) {
+        [self showHint:_passwordTf.placeholder];
+        return;
+    }
+    if (_passwordAgainTf.text.length==0) {
+        [self showHint:_passwordAgainTf.placeholder];
+        return;
+    }
+    if (![_verifyTf.text isEqualToString:_yazhengma]) {
+        [self showHint:@"验证码不正确,请重新输入"];
+        return;
+    }
+    if (![_passwordAgainTf.text isEqualToString:_passwordTf.text]) {
+        [self showHint:@"两次密码不一致,请重新输入"];
+        return;
+    }
+//    if (![RegExpManager validatePassword:_passwordAgainTf.text]) {
+//        [self showHint:@"密码不合法,请重新输入"];
+//        return;
+//    }
+    
     NSString *urlStr = [OPENAPIHOST stringByAppendingString:@"member/index/register"];
     /*@param  user_name         * 登录账号
      @param  string  user_phone   * 用户手机号

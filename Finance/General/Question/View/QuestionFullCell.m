@@ -64,7 +64,7 @@
     CGFloat contentHeight=[NSString heightWithString:model.question_describe size:CGSizeMake(SCREEN_WIDTH-2*MARGIN, 500) font:14];
     self.contentLabel.frame=CGRectMake(MARGIN, CGRectGetMaxY(self.contentImageView.frame)+MARGIN, SCREEN_WIDTH-2*MARGIN, contentHeight);
     self.contentLabel.text=model.question_describe;
-
+    self.contentLabel.numberOfLines=0;
     //提问者头像 昵称 浏览量
     self.headerImageView.frame=CGRectMake(MARGIN, CGRectGetMaxY(self.contentLabel.frame)+MARGIN, 30, 30);
     NSString *headerImageStr = [OPENAPIHOST stringByAppendingString:model.user_image];

@@ -14,6 +14,8 @@
 #import "TopicDetailNewVC.h"
 #import "MessageController.h"
 #import "AskController.h"
+#import "NSString+Extension.h"
+#import "SearchController.h"
 @interface ProjectViewController ()<UITableViewDelegate,UITableViewDataSource,UICollectionViewDelegate,UICollectionViewDataSource>
 {
     NSInteger nowIndex; // 点击之后的tag值
@@ -46,12 +48,11 @@
     self.tableView.backgroundColor = [UIColor colorWithHexString:@"#fcfcfa"];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerNib:[UINib nibWithNibName:@"ProjectTableViewCell" bundle:nil] forCellReuseIdentifier:@"ProjectTableViewCell"];
+   
     
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
-    [self.collectionView registerNib:[UINib nibWithNibName:@"ProjectCollectionViewCell" bundle:nil] forCellWithReuseIdentifier:@"ProjectCollectionViewCell"];
-    
+    [self.collectionView registerClass:[ProjectCollectionViewCell class] forCellWithReuseIdentifier:@"ProjectCollectionViewCell"];
     //注册一个区头视图
     [self.collectionView registerClass:[ProjectHeaderCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header"];
     
@@ -72,6 +73,7 @@
 - (void)setNavgationItem{
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"clock"] style:UIBarButtonItemStylePlain target:self action:@selector(showMessage)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"pen"] style:UIBarButtonItemStylePlain target:self action:@selector(writeQuestion)];
+    self.navigationItem.titleView = [self customSearchBar];
 
 }
 - (void)showMessage{
@@ -106,10 +108,13 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
-    ProjectTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProjectTableViewCell" forIndexPath:indexPath];
+    ProjectTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ProjectTableViewCell"];
+    if (!cell) {
+        cell=[[ProjectTableViewCell alloc]initWithStyle:(UITableViewCellStyleDefault) reuseIdentifier:@"ProjectTableViewCell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
     TopicModel*theT=self.topicArr[indexPath.row];
-    cell.nameLabel.text = theT.one_tag;
+    cell.title = theT.one_tag;
     
     if (indexPath.row == nowRow) {
         // 判断打开的是哪个分区
@@ -132,7 +137,10 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return 51;
+    TopicModel*theT=self.topicArr[indexPath.row];
+    CGFloat height = [NSString heightWithString:theT.one_tag size:CGSizeMake(70, 100) font:12];
+    
+    return height+10;
    
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -194,17 +202,31 @@
 {
     
     //重用cell
-    
     ProjectCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"ProjectCollectionViewCell" forIndexPath:indexPath];
+    
     TopicModel*nowTopic=self.topicArr[nowRow];
     TopicTwoModel*two=nowTopic.subject_list[indexPath.section];
     TopicContentModel*content=two.subject_content[indexPath.row];
+    cell.nameLabel.numberOfLines=0;
+    [cell.nameLabel setTextAlignment:(NSTextAlignmentLeft)];
     cell.nameLabel.text= content.subject_title;
-    cell.nameLabel.numberOfLines=2;
 
     
     return cell;
     
+}
+
+- (UIButton *)customSearchBar{
+    UIButton *searchButton = [UIButton buttonWithFrame:CGRectMake(0, 0, SCREEN_WIDTH-120, 30) title:@"搜索财务内容" font:FONT_NORMAL titleColor:GRAYCOLOR_TEXT imageName:@"search"  target:self actionName:@"search"];
+    searchButton.backgroundColor = WHITECOLOR;
+    searchButton.titleEdgeInsets = UIEdgeInsetsMake(0, 8, 0, 0);
+    searchButton.layer.cornerRadius = searchButton.height/2;
+    searchButton.layer.masksToBounds = YES;
+    return searchButton;
+}
+- (void)search{
+    SearchController *vc = [SearchController new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     TopicModel*nowTopic=self.topicArr[nowRow];
@@ -222,20 +244,22 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 
 {
-    
-    return CGSizeMake((self.collectionView.frame.size.width-3*12)/2, 40);
-    
+    TopicModel*nowTopic=self.topicArr[nowRow];
+    TopicTwoModel*two=nowTopic.subject_list[indexPath.section];
+    TopicContentModel*content=two.subject_content[indexPath.row];
+    CGFloat height =[NSString heightWithString:content.subject_title size:CGSizeMake(self.collectionView.frame.size.width-2*12, 100) font:12];
+    return CGSizeMake((self.collectionView.frame.size.width-2*12), height>40?height:40);
     
     
 }
 
-//定义每个Section 的 margin
+//定义每个Section 的 margin农村
 
 -(UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 
 {
     
-    return UIEdgeInsetsMake(14, 12, 14, 12);//分别为上、左、下、右
+    return UIEdgeInsetsMake(8, 12, 8, 12);//分别为上、左、下、右
     
 }
 //每个section中不同的行之间的行间距
@@ -311,7 +335,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
     
-    return CGSizeMake(200, 34);
+    return CGSizeMake(200, 40);
     
 }
 -(void)getAllTopics{

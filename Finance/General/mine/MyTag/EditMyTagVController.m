@@ -258,7 +258,10 @@ NSString*HeaderID=@"Header";
 
 -(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return CGSizeMake((self.myColl.frame.size.width-60)/3, 30);
+    TagBigModel*big=self.AllChannelArr[indexPath.section];
+    TagSmallModel*small=big.tag_list[indexPath.row];
+    CGFloat height =[NSString heightWithString:small.qt_name size:CGSizeMake(self.myColl.frame.size.width-30, 100) font:14];
+    return CGSizeMake(self.myColl.frame.size.width-30, height>30?height:30);
 }
 
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{

@@ -146,7 +146,7 @@
                 cell.itemImage.image = [UIImage imageNamed:@"guanzhu"];
                 cell.itemLabel.text = @"我的关注";
             }else if(indexPath.row == 2){
-                cell.itemImage.image = [UIImage imageNamed:@"guanzhu"];
+                cell.itemImage.image = [UIImage imageNamed:@"tip"];
                 cell.itemLabel.text = @"我的标签";
             }
         }else if(indexPath.section == 3){

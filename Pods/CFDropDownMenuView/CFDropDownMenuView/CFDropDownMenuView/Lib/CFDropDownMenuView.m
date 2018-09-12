@@ -196,7 +196,7 @@
         _dropDownMenuTableView.backgroundColor = [UIColor whiteColor];
         _dropDownMenuTableView.delegate = self;
         _dropDownMenuTableView.dataSource = self;
-        _dropDownMenuTableView.scrollEnabled = NO;
+//        _dropDownMenuTableView.scrollEnabled = NO;
         _dropDownMenuTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     }
     return _dropDownMenuTableView;
@@ -207,8 +207,13 @@
     
     [self.superview addSubview:self.bgView];
     [self.superview addSubview:self.dropDownMenuTableView];
+    CGFloat height =44 * self.dataSource.count;
+    if (height>=CFScreenHeight-KNAVI_HEIGHT-KTABBAR_HEIGHT-self.startY) {
+        height=CFScreenHeight-KNAVI_HEIGHT-KTABBAR_HEIGHT-self.startY;
+    }
+    
     [UIView animateWithDuration:0.25 animations:^{
-        self.dropDownMenuTableView.frame = CGRectMake(0, self.startY, CFScreenWidth, 44 * self.dataSource.count);
+        self.dropDownMenuTableView.frame = CGRectMake(0, self.startY, CFScreenWidth, height);
         
     } completion:^(BOOL finished) {
         [self.dropDownMenuTableView reloadData];

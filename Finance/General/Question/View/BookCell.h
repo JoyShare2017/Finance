@@ -15,4 +15,7 @@
 @property (nonatomic, strong) UILabel *describeLabel;
 @property (nonatomic, strong) UIViewController *superVC;
 @property (nonatomic, strong) UIButton *button;
+@property (nonatomic, strong) UILabel *priceLabel;
+@property (nonatomic) BOOL isBookDetailPage;//在著作详情页面使用 布局不同
+
 @end

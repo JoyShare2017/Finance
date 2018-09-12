@@ -8,20 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		03DFC5671EA01B6F1C39943C /* libPods-Finance.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44CB7B31B626F0A9E34261B0 /* libPods-Finance.a */; };
+		180F05C7212E8D3300FE1BDE /* AlphaAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 180F05C6212E8D3300FE1BDE /* AlphaAlertView.m */; };
+		180F05CA212E8E3200FE1BDE /* UBButton+FastBuild.m in Sources */ = {isa = PBXBuildFile; fileRef = 180F05C8212E8E3100FE1BDE /* UBButton+FastBuild.m */; };
+		180F05CD212E8E3A00FE1BDE /* UBLabel+FastBuild.m in Sources */ = {isa = PBXBuildFile; fileRef = 180F05CC212E8E3A00FE1BDE /* UBLabel+FastBuild.m */; };
+		180F05D0212E8E8500FE1BDE /* UBLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 180F05CF212E8E8500FE1BDE /* UBLabel.m */; };
+		180F05D8212E940400FE1BDE /* UBBTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 180F05D4212E93FE00FE1BDE /* UBBTextView.m */; };
+		180F05D9212E940400FE1BDE /* UBTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 180F05D5212E940000FE1BDE /* UBTextView.m */; };
 		18152EA620FDD5030062C670 /* BecomeExpertController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 18152EA320FDD5000062C670 /* BecomeExpertController.storyboard */; };
 		18152EA720FDD5030062C670 /* BecomeExpertController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18152EA420FDD5010062C670 /* BecomeExpertController.m */; };
 		18152ED620FEDCB50062C670 /* NoDataView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18152ED520FEDCB50062C670 /* NoDataView.m */; };
 		185AEAC21FF4C66B00B87B08 /* UIColor+ColorChange.m in Sources */ = {isa = PBXBuildFile; fileRef = 185AEABF1FF4C66A00B87B08 /* UIColor+ColorChange.m */; };
+		1863E4102130DEBA00A9F056 /* administrative_division_xml.xml in Resources */ = {isa = PBXBuildFile; fileRef = 1863E40F2130DEBA00A9F056 /* administrative_division_xml.xml */; };
 		188217731FF1F24700F2F24B /* MineTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188217721FF1F24700F2F24B /* MineTableViewController.m */; };
 		1882177E1FF1F9A500F2F24B /* MineItemTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 1882177C1FF1F9A500F2F24B /* MineItemTableViewCell.m */; };
 		1882177F1FF1F9A500F2F24B /* MineItemTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1882177D1FF1F9A500F2F24B /* MineItemTableViewCell.xib */; };
 		188217841FF2398900F2F24B /* ProjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 188217821FF2398900F2F24B /* ProjectViewController.m */; };
-		188217851FF2398900F2F24B /* ProjectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188217831FF2398900F2F24B /* ProjectViewController.xib */; };
 		1882178B1FF23AC000F2F24B /* ProjectTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188217891FF23AC000F2F24B /* ProjectTableViewCell.m */; };
-		1882178C1FF23AC000F2F24B /* ProjectTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1882178A1FF23AC000F2F24B /* ProjectTableViewCell.xib */; };
 		1882178F1FF2463D00F2F24B /* ProjectHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1882178E1FF2463D00F2F24B /* ProjectHeaderCollectionReusableView.m */; };
 		188217931FF2465900F2F24B /* ProjectCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 188217911FF2465900F2F24B /* ProjectCollectionViewCell.m */; };
-		188217941FF2465900F2F24B /* ProjectCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 188217921FF2465900F2F24B /* ProjectCollectionViewCell.xib */; };
 		1886C5B32121606300DD317C /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 1886C5AE2121606100DD317C /* README.txt */; };
 		1886C5B42121606300DD317C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1886C5B22121606300DD317C /* libWeChatSDK.a */; };
 		18A8FAE9211ACD0700D45EFE /* EditBookOrderVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A8FAE8211ACD0700D45EFE /* EditBookOrderVC.m */; };
@@ -43,6 +47,7 @@
 		18A8FB1B211AE69D00D45EFE /* Country.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A8FB19211AE69C00D45EFE /* Country.m */; };
 		18A8FB1E211AE76A00D45EFE /* UBTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A8FB1D211AE76A00D45EFE /* UBTextField.m */; };
 		18A8FB21211AE7EC00D45EFE /* RegExpManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18A8FB1F211AE7EB00D45EFE /* RegExpManager.m */; };
+		18BF426C2134F447009F421B /* ProjectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BF426B2134F446009F421B /* ProjectViewController.xib */; };
 		18BFA89A211BE4D6001B4C7A /* BottomFuncView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BFA898211BE4D6001B4C7A /* BottomFuncView.m */; };
 		18BFA89D211BEDF7001B4C7A /* OrderMoneyCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BFA89C211BEDF7001B4C7A /* OrderMoneyCell.m */; };
 		18BFA8A1211C12A4001B4C7A /* region.xml in Resources */ = {isa = PBXBuildFile; fileRef = 18BFA8A0211C12A4001B4C7A /* region.xml */; };
@@ -226,12 +231,25 @@
 /* Begin PBXFileReference section */
 		0BC0FDFE6F1F2363D0D96DD6 /* Pods-Finance.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Finance.release.xcconfig"; path = "Pods/Target Support Files/Pods-Finance/Pods-Finance.release.xcconfig"; sourceTree = "<group>"; };
 		0FB4BE8076FE5616420C21FE /* libPods-FinanceTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FinanceTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		180F05C5212E8D3100FE1BDE /* AlphaAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlphaAlertView.h; sourceTree = "<group>"; };
+		180F05C6212E8D3300FE1BDE /* AlphaAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlphaAlertView.m; sourceTree = "<group>"; };
+		180F05C8212E8E3100FE1BDE /* UBButton+FastBuild.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UBButton+FastBuild.m"; sourceTree = "<group>"; };
+		180F05C9212E8E3200FE1BDE /* UBButton+FastBuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UBButton+FastBuild.h"; sourceTree = "<group>"; };
+		180F05CB212E8E3900FE1BDE /* UBLabel+FastBuild.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UBLabel+FastBuild.h"; sourceTree = "<group>"; };
+		180F05CC212E8E3A00FE1BDE /* UBLabel+FastBuild.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UBLabel+FastBuild.m"; sourceTree = "<group>"; };
+		180F05CE212E8E8400FE1BDE /* UBLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UBLabel.h; sourceTree = "<group>"; };
+		180F05CF212E8E8500FE1BDE /* UBLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UBLabel.m; sourceTree = "<group>"; };
+		180F05D4212E93FE00FE1BDE /* UBBTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UBBTextView.m; sourceTree = "<group>"; };
+		180F05D5212E940000FE1BDE /* UBTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UBTextView.m; sourceTree = "<group>"; };
+		180F05D6212E940200FE1BDE /* UBBTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UBBTextView.h; sourceTree = "<group>"; };
+		180F05D7212E940400FE1BDE /* UBTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UBTextView.h; sourceTree = "<group>"; };
 		18152EA320FDD5000062C670 /* BecomeExpertController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = BecomeExpertController.storyboard; sourceTree = "<group>"; };
 		18152EA420FDD5010062C670 /* BecomeExpertController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BecomeExpertController.m; sourceTree = "<group>"; };
 		18152EA520FDD5020062C670 /* BecomeExpertController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BecomeExpertController.h; sourceTree = "<group>"; };
 		18152ED520FEDCB50062C670 /* NoDataView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NoDataView.m; sourceTree = "<group>"; };
 		185AEABF1FF4C66A00B87B08 /* UIColor+ColorChange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+ColorChange.m"; sourceTree = "<group>"; };
 		185AEAC11FF4C66B00B87B08 /* UIColor+ColorChange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+ColorChange.h"; sourceTree = "<group>"; };
+		1863E40F2130DEBA00A9F056 /* administrative_division_xml.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = administrative_division_xml.xml; sourceTree = "<group>"; };
 		188217711FF1F24700F2F24B /* MineTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MineTableViewController.h; sourceTree = "<group>"; };
 		188217721FF1F24700F2F24B /* MineTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MineTableViewController.m; sourceTree = "<group>"; };
 		1882177B1FF1F9A500F2F24B /* MineItemTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MineItemTableViewCell.h; sourceTree = "<group>"; };
@@ -239,15 +257,12 @@
 		1882177D1FF1F9A500F2F24B /* MineItemTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MineItemTableViewCell.xib; sourceTree = "<group>"; };
 		188217811FF2398900F2F24B /* ProjectViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProjectViewController.h; sourceTree = "<group>"; };
 		188217821FF2398900F2F24B /* ProjectViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProjectViewController.m; sourceTree = "<group>"; };
-		188217831FF2398900F2F24B /* ProjectViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProjectViewController.xib; sourceTree = "<group>"; };
 		188217881FF23AC000F2F24B /* ProjectTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProjectTableViewCell.h; sourceTree = "<group>"; };
 		188217891FF23AC000F2F24B /* ProjectTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProjectTableViewCell.m; sourceTree = "<group>"; };
-		1882178A1FF23AC000F2F24B /* ProjectTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProjectTableViewCell.xib; sourceTree = "<group>"; };
 		1882178D1FF2463D00F2F24B /* ProjectHeaderCollectionReusableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProjectHeaderCollectionReusableView.h; sourceTree = "<group>"; };
 		1882178E1FF2463D00F2F24B /* ProjectHeaderCollectionReusableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProjectHeaderCollectionReusableView.m; sourceTree = "<group>"; };
 		188217901FF2465900F2F24B /* ProjectCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProjectCollectionViewCell.h; sourceTree = "<group>"; };
 		188217911FF2465900F2F24B /* ProjectCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProjectCollectionViewCell.m; sourceTree = "<group>"; };
-		188217921FF2465900F2F24B /* ProjectCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProjectCollectionViewCell.xib; sourceTree = "<group>"; };
 		1886C5AE2121606100DD317C /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		1886C5AF2121606100DD317C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		1886C5B02121606200DD317C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
@@ -291,6 +306,7 @@
 		18A8FB1D211AE76A00D45EFE /* UBTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UBTextField.m; sourceTree = "<group>"; };
 		18A8FB1F211AE7EB00D45EFE /* RegExpManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegExpManager.m; sourceTree = "<group>"; };
 		18A8FB20211AE7EC00D45EFE /* RegExpManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegExpManager.h; sourceTree = "<group>"; };
+		18BF426B2134F446009F421B /* ProjectViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProjectViewController.xib; sourceTree = "<group>"; };
 		18BFA898211BE4D6001B4C7A /* BottomFuncView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BottomFuncView.m; sourceTree = "<group>"; };
 		18BFA899211BE4D6001B4C7A /* BottomFuncView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BottomFuncView.h; sourceTree = "<group>"; };
 		18BFA89B211BEDF7001B4C7A /* OrderMoneyCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderMoneyCell.h; sourceTree = "<group>"; };
@@ -691,7 +707,7 @@
 			children = (
 				188217811FF2398900F2F24B /* ProjectViewController.h */,
 				188217821FF2398900F2F24B /* ProjectViewController.m */,
-				188217831FF2398900F2F24B /* ProjectViewController.xib */,
+				18BF426B2134F446009F421B /* ProjectViewController.xib */,
 				188217871FF23AA200F2F24B /* cells */,
 				188217861FF23A9700F2F24B /* models */,
 			);
@@ -712,12 +728,10 @@
 			children = (
 				188217881FF23AC000F2F24B /* ProjectTableViewCell.h */,
 				188217891FF23AC000F2F24B /* ProjectTableViewCell.m */,
-				1882178A1FF23AC000F2F24B /* ProjectTableViewCell.xib */,
 				1882178D1FF2463D00F2F24B /* ProjectHeaderCollectionReusableView.h */,
 				1882178E1FF2463D00F2F24B /* ProjectHeaderCollectionReusableView.m */,
 				188217901FF2465900F2F24B /* ProjectCollectionViewCell.h */,
 				188217911FF2465900F2F24B /* ProjectCollectionViewCell.m */,
-				188217921FF2465900F2F24B /* ProjectCollectionViewCell.xib */,
 			);
 			path = cells;
 			sourceTree = "<group>";
@@ -883,6 +897,7 @@
 		AD2BDAA61FE8B7BE000A6925 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				1863E40F2130DEBA00A9F056 /* administrative_division_xml.xml */,
 				18BFA8A0211C12A4001B4C7A /* region.xml */,
 				AD2BDAA71FE8B7BE000A6925 /* Assets.xcassets */,
 				AD2BDAA81FE8B7BE000A6925 /* LaunchScreen.storyboard */,
@@ -980,6 +995,18 @@
 		AD2BDACE1FE8E909000A6925 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				180F05C5212E8D3100FE1BDE /* AlphaAlertView.h */,
+				180F05C6212E8D3300FE1BDE /* AlphaAlertView.m */,
+				180F05CE212E8E8400FE1BDE /* UBLabel.h */,
+				180F05CF212E8E8500FE1BDE /* UBLabel.m */,
+				180F05CB212E8E3900FE1BDE /* UBLabel+FastBuild.h */,
+				180F05CC212E8E3A00FE1BDE /* UBLabel+FastBuild.m */,
+				180F05C9212E8E3200FE1BDE /* UBButton+FastBuild.h */,
+				180F05C8212E8E3100FE1BDE /* UBButton+FastBuild.m */,
+				180F05D6212E940200FE1BDE /* UBBTextView.h */,
+				180F05D4212E93FE00FE1BDE /* UBBTextView.m */,
+				180F05D7212E940400FE1BDE /* UBTextView.h */,
+				180F05D5212E940000FE1BDE /* UBTextView.m */,
 				18BFA8B7211D8D5B001B4C7A /* 微信支付 */,
 				18BFA8A6211D7CB5001B4C7A /* 支付宝 */,
 				18A8FB00211AE57F00D45EFE /* 收货地址 */,
@@ -1402,7 +1429,6 @@
 				AD2BDA041FE8A963000A6925 /* Sources */,
 				AD2BDA051FE8A963000A6925 /* Frameworks */,
 				AD2BDA061FE8A963000A6925 /* Resources */,
-				018526935D4ACC6D3E28077D /* [CP] Embed Pods Frameworks */,
 				E376ABD118D7A627A6CA0527 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -1422,8 +1448,6 @@
 				AD2BDA1C1FE8A963000A6925 /* Sources */,
 				AD2BDA1D1FE8A963000A6925 /* Frameworks */,
 				AD2BDA1E1FE8A963000A6925 /* Resources */,
-				A71CEC8F11673AFDF5149CB9 /* [CP] Embed Pods Frameworks */,
-				2B5AAACA522B295F5C4D93C5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1443,8 +1467,6 @@
 				AD2BDA271FE8A963000A6925 /* Sources */,
 				AD2BDA281FE8A963000A6925 /* Frameworks */,
 				AD2BDA291FE8A963000A6925 /* Resources */,
-				E6BC7FFC3E808221358B3583 /* [CP] Embed Pods Frameworks */,
-				553F9FE85BBDC3FBC8092A5D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1512,19 +1534,18 @@
 				AD2EBD051FF4F406006D895D /* AskController.xib in Resources */,
 				AD2EBD031FF4F406006D895D /* SearchCell.xib in Resources */,
 				ADCC11FC1FE9192900CC6A5B /* ForgetPasswordController.xib in Resources */,
+				1863E4102130DEBA00A9F056 /* administrative_division_xml.xml in Resources */,
 				ADCC11F71FE9116200CC6A5B /* RegisterController.xib in Resources */,
 				AD2BDAB81FE8B7BF000A6925 /* Assets.xcassets in Resources */,
 				1882177F1FF1F9A500F2F24B /* MineItemTableViewCell.xib in Resources */,
-				1882178C1FF23AC000F2F24B /* ProjectTableViewCell.xib in Resources */,
 				AD738BFB2023F55D00507C5A /* ChoseServeCell.xib in Resources */,
 				AD2D1BF01FE8FBEC0032EDFE /* LoginController.xib in Resources */,
-				188217941FF2465900F2F24B /* ProjectCollectionViewCell.xib in Resources */,
 				18BFA8A1211C12A4001B4C7A /* region.xml in Resources */,
 				AD78B8711FFF2CF100B16455 /* TZImagePickerController.bundle in Resources */,
 				18152EA620FDD5030062C670 /* BecomeExpertController.storyboard in Resources */,
 				1886C5B32121606300DD317C /* README.txt in Resources */,
+				18BF426C2134F447009F421B /* ProjectViewController.xib in Resources */,
 				AD2BDAB91FE8B7BF000A6925 /* LaunchScreen.storyboard in Resources */,
-				188217851FF2398900F2F24B /* ProjectViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1545,21 +1566,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		018526935D4ACC6D3E28077D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Finance/Pods-Finance-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		0D8DE87B47D0D2CD185FEA32 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1578,21 +1584,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		2B5AAACA522B295F5C4D93C5 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FinanceTests/Pods-FinanceTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		45F18FB351137130E2C2AF02 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1609,36 +1600,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		553F9FE85BBDC3FBC8092A5D /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FinanceUITests/Pods-FinanceUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A71CEC8F11673AFDF5149CB9 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FinanceTests/Pods-FinanceTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C0ECEB1E5ED3FFCCE7ECF3DE /* [CP] Check Pods Manifest.lock */ = {
@@ -1667,9 +1628,9 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Finance/Pods-Finance-resources.sh",
 				"${PODS_ROOT}/CFDropDownMenuView/CFDropDownMenuView/CFDropDownMenuView/CFDropDownMenuView.bundle",
-				$PODS_CONFIGURATION_BUILD_DIR/CTAssetsPickerController/CTAssetsPickerController.bundle,
+				"${PODS_CONFIGURATION_BUILD_DIR}/CTAssetsPickerController/CTAssetsPickerController.bundle",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
-				$PODS_CONFIGURATION_BUILD_DIR/MWPhotoBrowser/MWPhotoBrowser.bundle,
+				"${PODS_CONFIGURATION_BUILD_DIR}/MWPhotoBrowser/MWPhotoBrowser.bundle",
 				"${PODS_ROOT}/UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle",
 				"${PODS_ROOT}/UMengUShare/UShareSDK/SocialLibraries/QQ/QQSDK/TencentOpenApi_IOS_Bundle.bundle",
 				"${PODS_ROOT}/UMengUShare/UShareSDK/SocialLibraries/Sina/SinaSDK/WeiboSDK.bundle",
@@ -1677,26 +1638,18 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CFDropDownMenuView.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/CTAssetsPickerController.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MWPhotoBrowser.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/UMSocialSDKPromptResources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TencentOpenApi_IOS_Bundle.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/WeiboSDK.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/UMSocialSDKResources.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Finance/Pods-Finance-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E6BC7FFC3E808221358B3583 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FinanceUITests/Pods-FinanceUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1741,6 +1694,7 @@
 				AD8AC0D5207C5D58001894FF /* TagBigModel.m in Sources */,
 				AD2D1BEF1FE8FBEC0032EDFE /* LoginController.m in Sources */,
 				AD78B86E1FFF2CF100B16455 /* NSBundle+TZImagePicker.m in Sources */,
+				180F05CA212E8E3200FE1BDE /* UBButton+FastBuild.m in Sources */,
 				AD308AF82089E27C00AEE7A6 /* AppointExpertVC.m in Sources */,
 				AD74980B2015C9AA00E8B228 /* TopicController.m in Sources */,
 				AD78B8751FFF2CF200B16455 /* TZPhotoPreviewCell.m in Sources */,
@@ -1749,6 +1703,7 @@
 				AD78B8781FFF2CF200B16455 /* TZGifPhotoPreviewController.m in Sources */,
 				ADD8E8EF2087315D00511254 /* UBTableviewTool.m in Sources */,
 				ADCCE2891FEA406100BBE38C /* UILabel+XSExtension.m in Sources */,
+				180F05C7212E8D3300FE1BDE /* AlphaAlertView.m in Sources */,
 				AD78B8771FFF2CF200B16455 /* TZLocationManager.m in Sources */,
 				18A8FAF8211ADF0C00D45EFE /* ChooseItemsCell.m in Sources */,
 				AD5D69852024471F000B4733 /* DrawLineView.m in Sources */,
@@ -1787,6 +1742,7 @@
 				ADB3B29320070BCB00E42F8A /* NoNetworkView.m in Sources */,
 				18A8FB0C211AE5F200D45EFE /* ReceiptAddressViewController.m in Sources */,
 				ADEC084B1FEA0F0B00C202C0 /* BaseController.m in Sources */,
+				180F05D8212E940400FE1BDE /* UBBTextView.m in Sources */,
 				AD4DE770200851A0003CFCC6 /* BookModel.m in Sources */,
 				ADF80F7D2021654E00A2BFA9 /* MyConsultModel.m in Sources */,
 				AD8AC0E4207EED44001894FF /* MyDetailInfoVC.m in Sources */,
@@ -1821,6 +1777,7 @@
 				AD2B360020036C74001C9704 /* UITableView+EmptyPlaceHolder.m in Sources */,
 				ADCC11F51FE910FF00CC6A5B /* RegisterController.m in Sources */,
 				ADBA3C7A1FFB6086001476D7 /* UserAccountManager.m in Sources */,
+				180F05D0212E8E8500FE1BDE /* UBLabel.m in Sources */,
 				ADCAA088200CA47200FAAC29 /* ConsultModel.m in Sources */,
 				18152EA720FDD5030062C670 /* BecomeExpertController.m in Sources */,
 				AD2EBD041FF4F406006D895D /* AskController.m in Sources */,
@@ -1828,6 +1785,7 @@
 				AD2F022A2019D3BC005C02D3 /* SearchResultController.m in Sources */,
 				AD8AC0BF207B35EB001894FF /* MyAttentionCell.m in Sources */,
 				AD98E4052009BAB800CB8136 /* AllAnswerController.m in Sources */,
+				180F05D9212E940400FE1BDE /* UBTextView.m in Sources */,
 				ADA32C932009A52B00283144 /* AnswerController.m in Sources */,
 				18A8FB18211AE67E00D45EFE /* City.m in Sources */,
 				AD2BDAD41FE8E99C000A6925 /* RootTabBarController.m in Sources */,
@@ -1838,6 +1796,7 @@
 				18152ED620FEDCB50062C670 /* NoDataView.m in Sources */,
 				AD2EBD0F1FF4F47E006D895D /* ExpertCell.m in Sources */,
 				AD74742820104890001550B6 /* SeverErrorView.m in Sources */,
+				180F05CD212E8E3A00FE1BDE /* UBLabel+FastBuild.m in Sources */,
 				AD78B84B1FFF033200B16455 /* ExpertDetailController.m in Sources */,
 				18A8FB0F211AE60200D45EFE /* AddressModel.m in Sources */,
 				AD2BDABE1FE8B7BF000A6925 /* AppDelegate.m in Sources */,
@@ -2016,7 +1975,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4J53L77JNF;
@@ -2049,7 +2008,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4J53L77JNF;

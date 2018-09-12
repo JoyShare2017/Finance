@@ -38,6 +38,7 @@
     [self addSubview:v];
     
     _coverImageView = [[UIButton alloc]initWithFrame:CGRectMake(MARGIN, 2*MARGIN, 60, 90)];
+    _coverImageView.imageView.contentMode = UIViewContentModeScaleAspectFit;
     _nameLabel = [UILabel labelWithTextFont:FONT_BIG textColor:BLACKCOLOR];
     _nameLabel.frame=CGRectMake(CGRectGetMaxX(_coverImageView.frame)+MARGIN, CGRectGetMinY(_coverImageView.frame), SCREEN_WIDTH-CGRectGetMaxX(_coverImageView.frame)-MARGIN_BIG-MARGIN, 50);
     _nameLabel.numberOfLines=2;

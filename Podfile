@@ -20,7 +20,7 @@ pod ‘UMengUShare/UI’
 pod ‘UMengUShare/Social/WeChat'
 pod ‘UMengUShare/Social/QQ'
 pod ‘UMengUShare/Social/Sina'
-
+pod 'UMengAnalytics-NO-IDFA', '~> 4.0.5'
   target 'FinanceTests' do
     inherit! :search_paths
     # Pods for testing

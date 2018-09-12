@@ -54,6 +54,7 @@ static NSString * const reuseIdentifierAnli = @"CellAnli";
     [self.tv registerClass:[TopicAnliCell class] forCellReuseIdentifier:reuseIdentifierAnli];
     [self.view addSubview:self.tv];
     
+
 }
 - (void)addNavgationItem{
     _collectBtn=[[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
@@ -162,13 +163,13 @@ static NSString * const reuseIdentifierAnli = @"CellAnli";
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row==0) {
-        return  _webheight1;
+        return  _webheight1+30;
     }
     if (indexPath.row==1) {
-        return  _webheight2;
+        return  _webheight2+30;
     }
     if (indexPath.row==2) {
-        return  _webheight3;
+        return  _webheight3+30;
     }
     return 200;
 }
@@ -180,7 +181,7 @@ static NSString * const reuseIdentifierAnli = @"CellAnli";
             self.web3=cell.webView;
             self.web3.delegate=self;
         }
-        cell.cellHeight=self.webheight3-30;
+        cell.cellHeight=self.webheight3+30;
         return cell;
     }else{
 
@@ -198,7 +199,7 @@ static NSString * const reuseIdentifierAnli = @"CellAnli";
                     [self.web1 loadHTMLString:htmlStr baseURL:nil];
                 }
             }
-            cell.cellHeight=self.webheight1-30;
+            cell.cellHeight=self.webheight1+30;
 
         }else if (indexPath.row == 1){
             if (_webheight2==200) {
@@ -211,14 +212,20 @@ static NSString * const reuseIdentifierAnli = @"CellAnli";
                 }
 
             }
-            cell.cellHeight=self.webheight2-30;
+            cell.cellHeight=self.webheight2+30;
 
         }
         return cell;
     }
 }
 
+
+
 -(void)webViewDidFinishLoad:(UIWebView *)webView{
+    // 禁止用户复制粘贴
+    [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitUserSelect='none';"];
+    // 禁止用户拨打电话
+    [webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.style.webkitTouchCallout='none';"];
     if (webView==_web1) {
         _webheight1=[[webView stringByEvaluatingJavaScriptFromString:@"document.body.scrollHeight"] integerValue];
 
